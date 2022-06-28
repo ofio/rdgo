@@ -30,3 +30,5 @@ changelog:
     exclude:
       - '^docs:'
       - '^test:'
+gomod:
+  proxy: true
