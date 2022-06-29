@@ -10,7 +10,7 @@ type PrimaryContact struct {
 type Contract struct {
 	BoardItemContracts      *[]BoardItemContract   `json:"board_item_contracts"`
 	Note                    string                 `json:"note"`
-	AnnualizedValue         int                    `json:"annualized_value"`
+	AnnualizedValue         float64                `json:"annualized_value"`
 	Business                Business               `json:"business"`
 	FundingDepartment       string                 `json:"funding_department"`
 	IncreasePercent         float64                `json:"increase_percent"`
@@ -24,7 +24,7 @@ type Contract struct {
 	PrimaryContact          PrimaryContact         `json:"primary_contact"`
 	ManagingDepartment      string                 `json:"managing_department"`
 	ContractDiscountTerms   []ContractDiscountTerm `json:"contract_discount_terms"`
-	TotalValue              int                    `json:"total_value"`
+	TotalValue              float64                `json:"total_value"`
 	ContractStatus          ContractStatus         `json:"contract_status"`
 	ContractCommodities     []ContractCommodities  `json:"contract_commodities"`
 	ContractAttachments     []ContractAttachment   `json:"contract_attachments"`

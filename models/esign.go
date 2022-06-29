@@ -1,4 +1,4 @@
-package esign
+package common
 
 import (
 	"github.com/ofio/esign"
