@@ -1,6 +1,6 @@
 package common
 
-import esign "github.com/ofio/rdgo/models/Esign"
+import "github.com/ofio/esign"
 
 type PrimaryContact struct {
 	ID   string `json:"id"`
