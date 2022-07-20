@@ -1,4 +1,4 @@
-package common
+package rdgo
 
 import (
 	"github.com/ofio/esign"
