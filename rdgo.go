@@ -1,6 +1,7 @@
-package main
+package rdgo
 
-func main() {
-	_ = &ApprovalRequestApprover{Approver: Approver{Email: "test@raindrop.com", Name: "test"}}
+import "log"
 
+func rdgo() {
+	log.Println("package rdgo")
 }

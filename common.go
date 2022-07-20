@@ -1,4 +1,4 @@
-package main
+package rdgo
 
 import "github.com/ofio/esign"
 
