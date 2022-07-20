@@ -91,7 +91,7 @@ func GcsUpload(ctx context.Context, client *storage.Client, r bufio.Reader, buck
 
 func UpsertAttachmentGen(tableName string, attachmentName string, attachmentUuid string, attachmentGen int64, attachmentMime string, attachmentInstance int, attachmentUser string, objectId int, endpoint string, adminSecret string, bearer string) (int, string, error) {
 	upsertAttachmentGQL := `mutation upsert_` + tableName + `_attachment($changes: [` + tableName + `_attachment_insert_input!]!) {
-		insert_` + tableName + `_attachment(objects: $changes, on_conflict: {constraint: ` + tableName + `_attachment_uuid_key, update_columns: [name, uuid, generation, mime_type, read_secret]}) {
+		insert_` + tableName + `_attachment(objects: $changes, on_conflict: {constraint: ` + tableName + `_attachment_pkey, update_columns: [name, uuid, generation, mime_type, read_secret]}) {
 			affected_rows
 			returning {
 				id
@@ -150,7 +150,8 @@ func UpsertAttachmentGen(tableName string, attachmentName string, attachmentUuid
 	}
 
 	if len(rd.Errors) != 0 {
-		fmt.Println("hasura error: ", rd.Errors)
+		log.Println("hasura error: ", rd.Errors)
+		return -1, "", &MyError{rd.Errors[0].Message}
 	} else {
 		fmt.Println(rd.Data.Attachment)
 		if len(rd.Data.Attachment.Returning) > 0 {
