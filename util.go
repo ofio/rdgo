@@ -89,7 +89,7 @@ func GcsUpload(ctx context.Context, client *storage.Client, r bufio.Reader, buck
 	return nil
 }
 
-func UpsertAttachmentGen(tableName string, attachmentName string, attachmentUuid string, attachmentGen int64, attachmentMime string, attachmentInstance int, attachmentUser string, contractId int, endpoint string, adminSecret string, bearer string) (int, string, error) {
+func UpsertAttachmentGen(tableName string, attachmentName string, attachmentUuid string, attachmentGen int64, attachmentMime string, attachmentInstance int, attachmentUser string, objectId int, endpoint string, adminSecret string, bearer string) (int, string, error) {
 	upsertAttachmentGQL := `mutation upsert_` + tableName + `_attachment($changes: [` + tableName + `_attachment_insert_input!]!) {
 		insert_` + tableName + `_attachment(objects: $changes, on_conflict: {constraint: ` + tableName + `_attachment_uuid_key, update_columns: [name, uuid, generation, mime_type, read_secret]}) {
 			affected_rows
@@ -103,20 +103,22 @@ func UpsertAttachmentGen(tableName string, attachmentName string, attachmentUuid
 	if len(attachmentMime) < 1 {
 		attachmentMime = "application/octet-stream"
 	}
+	changes := map[string]interface{}{
+		"name":        attachmentName,
+		"uuid":        attachmentUuid,
+		"generation":  attachmentGen,
+		"mime_type":   attachmentMime,
+		"instance_id": attachmentInstance,
+		"created_by":  attachmentUser,
+		"updated_by":  attachmentUser,
+	}
+
+	changes[tableName] = objectId
 
 	payload := map[string]interface{}{
 		"query": upsertAttachmentGQL,
 		"variables": map[string]interface{}{
-			"changes": map[string]interface{}{
-				"name":        attachmentName,
-				"uuid":        attachmentUuid,
-				"generation":  attachmentGen,
-				"mime_type":   attachmentMime,
-				"instance_id": attachmentInstance,
-				"created_by":  attachmentUser,
-				"updated_by":  attachmentUser,
-				"contract_id": contractId,
-			},
+			"changes": changes,
 		},
 	}
 
@@ -174,7 +176,7 @@ func GetGeneration(client *storage.Client, ctx context.Context, bucket string, n
 	}
 }
 
-func FileUpsert(file *bufio.Reader, instance int, fileName string, mime string, user string, uuidString string, contractID int, bucket string, tableName string, endpoint string, adminSecret string, bearer string) (int, string, int64, error) {
+func FileUpsert(file *bufio.Reader, instance int, fileName string, mime string, user string, uuidString string, objectID int, bucket string, tableName string, endpoint string, adminSecret string, bearer string) (int, string, int64, error) {
 	UUID := uuid.NewV4().String()
 
 	ustr := ""
@@ -222,7 +224,7 @@ func FileUpsert(file *bufio.Reader, instance int, fileName string, mime string, 
 		_ = mime
 	}
 
-	id, uuid, err := UpsertAttachmentGen(tableName, fileName, ustr, gen, mime, instance, user, contractID, endpoint, adminSecret, bearer)
+	id, uuid, err := UpsertAttachmentGen(tableName, fileName, ustr, gen, mime, instance, user, objectID, endpoint, adminSecret, bearer)
 	if err != nil {
 		fmt.Println("could not upsert attachment gen")
 
