@@ -113,7 +113,7 @@ func UpsertAttachmentGen(tableName string, attachmentName string, attachmentUuid
 		"updated_by":  attachmentUser,
 	}
 
-	changes[tableName] = objectId
+	changes[tableName+"_id"] = objectId
 
 	payload := map[string]interface{}{
 		"query": upsertAttachmentGQL,
