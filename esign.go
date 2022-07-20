@@ -1,4 +1,4 @@
-package rdgo
+package main
 
 import (
 	"github.com/ofio/esign"
@@ -69,6 +69,10 @@ type ApprovalRequestUpdate struct {
 
 type MyError struct {
 	Msg string
+}
+
+func (error *MyError) Error() string {
+	return error.Msg
 }
 
 type Urlredirect struct {
