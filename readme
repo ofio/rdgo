@@ -1,8 +1,9 @@
 release guide:
   following instructions here: https://goreleaser.com/quick-start/
   export GITHUB_TOKEN=
-  git tag -a v0.1.4 -m "structs update"
-  git push origin v0.1.4
+  export GITTAG=v0.2.1
+  git tag -a $GITTAG -m "structs update"
+  git push origin $GITTAG
   goreleaser release --rm-dist
 
 usage:
