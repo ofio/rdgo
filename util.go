@@ -90,7 +90,7 @@ func GcsUpload(ctx context.Context, client *storage.Client, r bufio.Reader, buck
 }
 
 func UpsertAttachmentGen(tableName string, attachmentName string, attachmentUuid string, attachmentGen int64, attachmentMime string, attachmentInstance int, attachmentUser string, contractId int, endpoint string, adminSecret string, bearer string) (int, string, error) {
-	upsertAttachmentGQL = `mutation upsert_` + tableName + `_attachment($changes: [` + tableName + `_attachment_insert_input!]!) {
+	upsertAttachmentGQL := `mutation upsert_` + tableName + `_attachment($changes: [` + tableName + `_attachment_insert_input!]!) {
 		insert_` + tableName + `_attachment(objects: $changes, on_conflict: {constraint: ` + tableName + `_attachment_uuid_key, update_columns: [name, uuid, generation, mime_type, read_secret]}) {
 			affected_rows
 			returning {
