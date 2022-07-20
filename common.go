@@ -80,7 +80,7 @@ type ApprovalRequestContract struct {
 	ManagingDepartment    string                 `json:"managing_department"`
 	Note                  string                 `json:"note"`
 	ContractDiscountTerms []ContractDiscountTerm `json:"contract_discount_terms"`
-	TotalValue            int                    `json:"total_value"`
+	TotalValue            float64                `json:"total_value"`
 	AnnualizedValue       int                    `json:"annualized_value"`
 	ContractStatus        struct {
 		ID int `json:"id"`

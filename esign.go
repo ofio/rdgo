@@ -89,6 +89,13 @@ type InternalStorage struct {
 	Gen  int64  `json:"gen"`
 }
 
+type DocusignToken struct {
+	AccessToken string `json:"access_token"`
+	TokenType   string `json:"token_type"`
+	ExpiresIn   string `json:"expires_in"`
+	APIBaseURL  string `json:"api_base_url"`
+}
+
 type ContractAttachmentMutation struct {
 	ContractID   int    `json:"contract_id"`
 	AttachmentID int    `json:"attachment_id"`
