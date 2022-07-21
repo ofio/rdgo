@@ -17,4 +17,5 @@ require (
 	google.golang.org/genproto v0.0.0-20220617124728-180714bec0ad // indirect
 	google.golang.org/grpc/examples v0.0.0-20220720212454-679138d61ee5 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
+	gopkg.in/guregu/null.v4 v4.0.0
 )

@@ -1,6 +1,9 @@
 package rdgo
 
-import "github.com/ofio/esign"
+import (
+	"github.com/ofio/esign"
+	"gopkg.in/guregu/null.v4"
+)
 
 type PrimaryContact struct {
 	ID   string `json:"id"`
@@ -227,7 +230,8 @@ type Owner struct {
 }
 
 type Contractupdateinput struct {
-	ContractStatus string `json:"status"`
+	ContractStatus string    `json:"status"`
+	SignedDate     null.Time `json:"signed_date"`
 }
 
 type Data struct {
