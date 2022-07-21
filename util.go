@@ -89,7 +89,7 @@ func GcsUpload(ctx context.Context, client *storage.Client, r bufio.Reader, buck
 	return nil
 }
 
-func UpsertAttachmentGen(tableName string, attachmentName string, attachmentUuid string, attachmentGen int64, attachmentMime string, attachmentInstance int, attachmentUser string, objectId int, endpoint string, adminSecret string, bearer string, createdByInstanceID string, updatedByInstanceID string) (int, string, error) {
+func UpsertAttachmentGen(tableName string, attachmentName string, attachmentUuid string, attachmentGen int64, attachmentMime string, attachmentInstance int, attachmentUser string, objectId int, endpoint string, adminSecret string, bearer string, createdByInstanceID int, updatedByInstanceID int) (int, string, error) {
 	upsertAttachmentGQL := `mutation upsert_` + tableName + `_attachment($changes: [` + tableName + `_attachment_insert_input!]!) {
 		insert_` + tableName + `_attachment(objects: $changes, on_conflict: {constraint: ` + tableName + `_attachment_pkey, update_columns: [name, uuid, generation, mime_type, read_secret]}) {
 			affected_rows
@@ -114,10 +114,10 @@ func UpsertAttachmentGen(tableName string, attachmentName string, attachmentUuid
 	}
 
 	changes[tableName+"_id"] = objectId
-	if len(createdByInstanceID) > 0 {
+	if createdByInstanceID > -1 {
 		changes["created_by_instance_id"] = createdByInstanceID
 	}
-	if len(updatedByInstanceID) > 0 {
+	if updatedByInstanceID > -1 {
 		changes["updated_by_instance_id"] = updatedByInstanceID
 	}
 
@@ -183,7 +183,7 @@ func GetGeneration(client *storage.Client, ctx context.Context, bucket string, n
 	}
 }
 
-func FileUpsert(file *bufio.Reader, instance int, fileName string, mime string, user string, uuidString string, objectID int, bucket string, tableName string, endpoint string, adminSecret string, bearer string, createdByInstanceID string, updatedByInstanceID string) (int, string, int64, error) {
+func FileUpsert(file *bufio.Reader, instance int, fileName string, mime string, user string, uuidString string, objectID int, bucket string, tableName string, endpoint string, adminSecret string, bearer string, createdByInstanceID int, updatedByInstanceID int) (int, string, int64, error) {
 	UUID := uuid.NewV4().String()
 
 	ustr := ""
