@@ -239,9 +239,16 @@ type Data struct {
 	} `json:"insert_attachment"`
 	ContractAttachment struct {
 		Returning []struct {
-			Id int `json:"id"`
+			Id   int    `json:"id"`
+			UUID string `json:"uuid"`
 		} `json:"returning"`
 	} `json:"insert_contract_attachment"`
+	PoHeaderAttachment struct {
+		Returning []struct {
+			Id   int    `json:"id"`
+			UUID string `json:"uuid"`
+		} `json:"returning"`
+	} `json:"insert_po_header_attachment"`
 	Integration []struct {
 		ModuleName string `json:"module_name"`
 		Type       string `json:"type"`

@@ -160,8 +160,10 @@ func UpsertAttachmentGen(tableName string, attachmentName string, attachmentUuid
 		return -1, "", &MyError{rd.Errors[0].Message}
 	} else {
 		fmt.Println(rd.Data.Attachment)
-		if len(rd.Data.Attachment.Returning) > 0 {
-			return rd.Data.Attachment.Returning[0].Id, rd.Data.Attachment.Returning[0].Uuid, nil
+		if len(rd.Data.ContractAttachment.Returning) > 0 {
+			return rd.Data.ContractAttachment.Returning[0].Id, rd.Data.ContractAttachment.Returning[0].UUID, nil
+		} else if len(rd.Data.PoHeaderAttachment.Returning) > 0 {
+			return rd.Data.PoHeaderAttachment.Returning[0].Id, rd.Data.PoHeaderAttachment.Returning[0].UUID, nil
 		}
 	}
 	return -1, "", err
