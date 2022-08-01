@@ -15,7 +15,7 @@ type Contract struct {
 	Note                    string                 `json:"note"`
 	AnnualizedValue         float64                `json:"annualized_value"`
 	Business                Business               `json:"business"`
-	FundingDepartment       string                 `json:"funding_department"`
+	FundingDepartment       Department             `json:"funding_department"`
 	IncreasePercent         float64                `json:"increase_percent"`
 	RenewalType             string                 `json:"renewal_type"`
 	RenegotiationAlertDate  string                 `json:"renegotiation_alert_date"`
@@ -25,7 +25,7 @@ type Contract struct {
 	EndDate                 string                 `json:"end_date"`
 	Owner                   Owner                  `json:"owner"`
 	PrimaryContact          PrimaryContact         `json:"primary_contact"`
-	ManagingDepartment      string                 `json:"managing_department"`
+	ManagingDepartment      Department             `json:"managing_department"`
 	ContractDiscountTerms   []ContractDiscountTerm `json:"contract_discount_terms"`
 	TotalValue              float64                `json:"total_value"`
 	ContractStatus          ContractStatus         `json:"contract_status"`
@@ -55,8 +55,13 @@ type ApprovalRequestCreator struct {
 	} `json:"user_preference"`
 }
 
+type Department struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+}
+
 type ApprovalRequestContract struct {
-	FundingDepartment   string               `json:"funding_department"`
+	FundingDepartment   Department           `json:"funding_department"`
 	UUID                string               `json:"uuid"`
 	ID                  int                  `json:"id"`
 	Name                string               `json:"name"`
@@ -80,7 +85,7 @@ type ApprovalRequestContract struct {
 		ID   string `json:"id"`
 		Name string `json:"name"`
 	} `json:"primary_contact"`
-	ManagingDepartment    string                 `json:"managing_department"`
+	ManagingDepartment    Department             `json:"managing_department"`
 	Note                  string                 `json:"note"`
 	ContractDiscountTerms []ContractDiscountTerm `json:"contract_discount_terms"`
 	TotalValue            float64                `json:"total_value"`
