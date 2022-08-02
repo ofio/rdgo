@@ -5,6 +5,16 @@ import (
 	"gopkg.in/guregu/null.v4"
 )
 
+type integrationQuery struct {
+	BusinessID int    `json:"business_id"`
+	Data       string `json:"data,omitempty"`
+	Type       string `json:"type,omitempty"`
+}
+
+type contractQuery struct {
+	ExternalID string `json:"external_id"`
+}
+
 type PrimaryContact struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
@@ -50,8 +60,10 @@ type ApprovalRequestCreator struct {
 	InstanceID      int      `json:"instance_id"`
 	Instance        Instance `json:"instance"`
 	UserPreferences struct {
-		DocusignRefreshToken string          `json:"docusign_refresh_token"`
-		DocusignUserInfo     *esign.UserInfo `json:"docusign_user_info"`
+		DocusignRefreshToken  string          `json:"docusign_refresh_token"`
+		DocusignUserInfo      *esign.UserInfo `json:"docusign_user_info"`
+		AdobeSignRefreshToken string          `json:"adobe_sign_refresh_token"`
+		AdobeSignApi          string          `json:"adobe_sign_api"`
 	} `json:"user_preference"`
 }
 

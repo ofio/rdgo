@@ -538,3 +538,163 @@ type Returning struct {
 type QueryReq struct {
 	ExternalID string `json:"external_id"`
 }
+
+type AccessCode struct {
+	Code string `json:"code"`
+}
+
+type ApiErrorResponse struct {
+	Code    string `json:"code"`
+	Message string `json:"message"`
+}
+
+type JsonArray struct {
+	Headers [][]string
+}
+
+type AccessToken struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token,omitempty"`
+	TokenType    string `json:"token_type"`
+	Expires      int    `json:"expires_in"`
+}
+type Ccs struct {
+	Email string
+}
+type FilesInfo struct {
+	FileType                  string `json:"fileType"`
+	TransientDocumentID       string `json:"transientDocumentId"`
+	ChildAgreementsInfoFileID string `json:"childAgreementsInfoFileId"`
+}
+
+type ChildAgreementsInfo struct {
+	FileInfo FilesInfo `json:"fileInfo"`
+}
+type MergeFieldInfo struct {
+	DefaultValue string `json:"defaultValue"`
+	FieldName    string `json:"fieldName"`
+}
+
+type AutomationInfo struct {
+	AuditTrailUUID string `json:"audit_trail"`
+}
+
+type ApprovalRequestQuery struct {
+	ID int `json:"id"`
+}
+
+type UserPrefQuery struct {
+	Uid string `json:"user_id"`
+}
+
+type ApprovalRequestInsertExternalLogInputAdobesign struct {
+	Log               *WebhookEvent `json:"log,omitempty"`
+	ApprovalRequestId int           `json:"approval_request_id,omitempty"`
+	CreatedBy         string        `json:"created_by,omitempty"`
+	UpdatedBy         string        `json:"updated_by,omitempty"`
+	InstanceId        int           `json:"instance_id,omitempty"`
+}
+
+type WebhookEvent struct {
+	WebhookID             string `json:"webhookId"`
+	WebhookName           string `json:"webhookName"`
+	WebhookNotificationID string `json:"webhookNotificationId"`
+	WebhookURLInfo        struct {
+		URL string `json:"url"`
+	} `json:"webhookUrlInfo"`
+	WebhookScope                       string `json:"webhookScope"`
+	WebhookNotificationApplicableUsers []struct {
+		ID                string `json:"id"`
+		Email             string `json:"email"`
+		Role              string `json:"role"`
+		PayloadApplicable bool   `json:"payloadApplicable"`
+	} `json:"webhookNotificationApplicableUsers"`
+	Event                   string `json:"event"`
+	SubEvent                string `json:"subEvent"`
+	EventDate               string `json:"eventDate"`
+	EventResourceType       string `json:"eventResourceType"`
+	EventResourceParentType string `json:"eventResourceParentType"`
+	EventResourceParentID   string `json:"eventResourceParentId"`
+	ParticipantRole         string `json:"participantRole"`
+	ActionType              string `json:"actionType"`
+	ParticipantUserID       string `json:"participantUserId"`
+	ParticipantUserEmail    string `json:"participantUserEmail"`
+	ActingUserID            string `json:"actingUserId"`
+	ActingUserEmail         string `json:"actingUserEmail"`
+	ActingUserIPAddress     string `json:"actingUserIpAddress"`
+	InitiatingUserID        string `json:"initiatingUserId"`
+	InitiatingUserEmail     string `json:"initiatingUserEmail"`
+	Agreement               struct {
+		ID            string `json:"id"`
+		Name          string `json:"name"`
+		SignatureType string `json:"signatureType"`
+		Status        string `json:"status"`
+		Ccs           []struct {
+			Email        string   `json:"email"`
+			Label        string   `json:"label"`
+			VisiblePages []string `json:"visiblePages"`
+		} `json:"ccs"`
+		DeviceInfo struct {
+			ApplicationDescription string `json:"applicationDescription"`
+			DeviceDescription      string `json:"deviceDescription"`
+			Location               struct {
+				Latitude  string `json:"latitude"`
+				Longitude string `json:"longitude"`
+			} `json:"location"`
+			DeviceTime string `json:"deviceTime"`
+		} `json:"deviceInfo"`
+		DocumentVisibilityEnabled bool   `json:"documentVisibilityEnabled"`
+		CreatedDate               string `json:"createdDate"`
+		ExpirationTime            string `json:"expirationTime"`
+		ExternalID                struct {
+			ID string `json:"id"`
+		} `json:"externalId"`
+		PostSignOption struct {
+			RedirectDelay int    `json:"redirectDelay"`
+			RedirectURL   string `json:"redirectUrl"`
+		} `json:"postSignOption"`
+		FirstReminderDelay int    `json:"firstReminderDelay"`
+		Locale             string `json:"locale"`
+		Message            string `json:"message"`
+		ReminderFrequency  string `json:"reminderFrequency"`
+		SenderEmail        string `json:"senderEmail"`
+		VaultingInfo       struct {
+			Enabled string `json:"enabled"`
+		} `json:"vaultingInfo"`
+		WorkflowID          string `json:"workflowId"`
+		ParticipantSetsInfo struct {
+			ParticipantSets []struct {
+				MemberInfos []struct {
+					ID             string `json:"id"`
+					Email          string `json:"email"`
+					Company        string `json:"company"`
+					Name           string `json:"name"`
+					PrivateMessage string `json:"privateMessage"`
+					Status         string `json:"status"`
+				} `json:"memberInfos"`
+				Order          int    `json:"order"`
+				Role           string `json:"role"`
+				Status         string `json:"status"`
+				ID             string `json:"id"`
+				Name           string `json:"name"`
+				PrivateMessage string `json:"privateMessage"`
+			} `json:"participantSets"`
+		} `json:"participantSetsInfo"`
+		DocumentsInfo struct {
+			Documents []struct {
+				ID       string `json:"id"`
+				Label    string `json:"label"`
+				NumPages int    `json:"numPages"`
+				MimeType string `json:"mimeType"`
+				Name     string `json:"name"`
+			} `json:"documents"`
+			SupportingDocuments []struct {
+				DisplayLabel string `json:"displayLabel"`
+				FieldName    string `json:"fieldName"`
+				ID           string `json:"id"`
+				MimeType     string `json:"mimeType"`
+				NumPages     int    `json:"numPages"`
+			} `json:"supportingDocuments"`
+		} `json:"documentsInfo"`
+	} `json:"agreement"`
+}
