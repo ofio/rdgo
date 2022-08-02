@@ -130,7 +130,8 @@ type Integrationupdateinput struct {
 }
 
 type Options struct {
-	AgreementInfo WebhookEvent `json:"agreementinfo"`
+	EnvelopeInfo  esign.EnvelopeStatusXML `xml:"EnvelopeStatus" json:"envelopeStatus,omitempty"`
+	AgreementInfo WebhookEvent            `json:"agreementinfo,omitempty"`
 }
 
 type IntegrationQuery struct {
