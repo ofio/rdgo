@@ -132,10 +132,12 @@ type Integrationupdateinput struct {
 type Options struct {
 	EnvelopeInfo esign.EnvelopeStatusXML `xml:"EnvelopeStatus" json:"envelopeStatus,omitempty"`
 }
-type IntegrationQuery struct {
-	ExternalID string `json:"external_id"`
-}
 
+type IntegrationQuery struct {
+	BusinessID int    `json:"business_id"`
+	Data       string `json:"data,omitempty"`
+	Type       string `json:"type,omitempty"`
+}
 type UserInfo struct {
 	FirstName  string `json:"firstName,omitempty"`
 	LastName   string `json:"lastName,omitempty"`

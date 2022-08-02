@@ -5,13 +5,7 @@ import (
 	"gopkg.in/guregu/null.v4"
 )
 
-type integrationQuery struct {
-	BusinessID int    `json:"business_id"`
-	Data       string `json:"data,omitempty"`
-	Type       string `json:"type,omitempty"`
-}
-
-type contractQuery struct {
+type ContractQuery struct {
 	ExternalID string `json:"external_id"`
 }
 
@@ -284,8 +278,8 @@ type Data struct {
 		Type string            `json:"type"`
 		Data map[string]string `json:"data"`
 	} `json:"business_integration"`
-	ApprovalRequestQueryResult []ApprovalRequest `json:"approval_request"`
-	EmailTemplate              []struct {
+	ApprovalRequest []ApprovalRequest `json:"approval_request"`
+	EmailTemplate   []struct {
 		ID int `json:"id"`
 	} `json:"email_template"`
 }
