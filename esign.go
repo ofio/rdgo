@@ -47,6 +47,7 @@ type RequestFile struct {
 type RequestBody struct {
 	ApprovalRequest *int   `json:"request,omitempty"`
 	Code            string `json:"code,omitempty"`
+	Api             string `json:"api,omitempty"`
 }
 
 type RedirectEmbed struct {
@@ -106,7 +107,11 @@ type ContractAttachmentMutation struct {
 	InstanceID   int    `json:"instance_id"`
 	CreatedBy    string `json:"created_by"`
 	UpdatedBy    string `json:"updated_by"`
+	Generation   int64  `json:"generation"`
+	Mime         string `json:"mime_type"`
+	Name         string `json:"name"`
 }
+
 type Integrationinsertinput struct {
 	UUID            string  `json:"object_uuid"`
 	CreatedBy       string  `json:"created_by"`
@@ -697,4 +702,14 @@ type WebhookEvent struct {
 			} `json:"supportingDocuments"`
 		} `json:"documentsInfo"`
 	} `json:"agreement"`
+}
+
+type ApprovalRequestInsertInput struct {
+	ObjectType  string `json:"object_type,omitempty"`
+	ObjectUUID  string `json:"object_uuid,omitempty"`
+	Status      string `json:"status,omitempty"`
+	DueDate     string `json:"due_date,omitempty"`
+	WorkflowId  string `json:"workflow_id,omitempty"`
+	Message     string `json:"message,omitempty"`
+	ServiceName string `json:"service_name,omitempty"`
 }
