@@ -62,7 +62,7 @@ type ApprovalRequestCreator struct {
 }
 
 type Department struct {
-	Id   string `json:"id"`
+	Id   int    `json:"id"`
 	Name string `json:"name"`
 }
 
