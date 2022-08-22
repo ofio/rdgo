@@ -39,6 +39,7 @@ type Contract struct {
 	Name                    string                 `json:"name"`
 	UUID                    string                 `json:"uuid"`
 	CurrencyCode            string                 `json:"currency_code"`
+	ApprovalRequests        []ApprovalRequest      `json:"approval_requests"`
 }
 
 type Instance struct {
