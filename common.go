@@ -305,3 +305,8 @@ type Attachment struct {
 	Name       string `json:"name"`
 	Mime       string `json:"mime_type"`
 }
+
+type EmailTemplate struct {
+	ID       int    `json:"id"`
+	Template string `json:"template"`
+}

@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -241,4 +242,49 @@ func FileUpsert(file *bufio.Reader, instance int, fileName string, mime string, 
 	}
 
 	return id, uuid, gen, nil
+}
+
+//smartQuery takes the gql query as a string, variables as map string interface and performs hasura query
+func SmartQuery(query string, dynamicQuery map[string]interface{}, hasuraEndpoint string, adminSecret string, bearer string) (Responsedata, error) {
+
+	payload := map[string]interface{}{
+		"query":     query,
+		"variables": dynamicQuery,
+	}
+
+	b := new(bytes.Buffer)
+	err := json.NewEncoder(b).Encode(payload)
+	if err != nil {
+		log.Println("json encoding error", err)
+	}
+
+	reqAPI, _ := http.NewRequest("POST", hasuraEndpoint, b)
+	reqAPI.Header.Add("content-type", "application/json")
+
+	if len(adminSecret) > 0 {
+		reqAPI.Header.Add("X-Hasura-Admin-Secret", adminSecret)
+	} else {
+		reqAPI.Header.Add("Authorization", bearer)
+	}
+
+	resAPI, err := http.DefaultClient.Do(reqAPI)
+	rd := Responsedata{}
+	if err != nil {
+		return rd, err
+	}
+
+	bslice, err := ioutil.ReadAll(resAPI.Body)
+	bcopy := make([]byte, len(bslice))
+	n := copy(bcopy, bslice)
+	log.Println("bytes copied", n)
+	err = json.Unmarshal(bslice, &rd)
+	if err != nil {
+		return rd, &MyError{rd.Errors[0].Message}
+	}
+
+	if len(rd.Errors) != 0 {
+		return rd, &MyError{rd.Errors[0].Message}
+
+	}
+	return rd, err
 }
