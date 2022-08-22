@@ -1,6 +1,8 @@
 package rdgo
 
 import (
+	"time"
+
 	"github.com/ofio/esign"
 	"gopkg.in/guregu/null.v4"
 )
@@ -226,9 +228,12 @@ type Approver struct {
 }
 
 type ApprovalRequestApprover struct {
-	Sequence int      `json:"sequence"`
-	IsSigner bool     `json:"is_signer"`
-	Approver Approver `json:"approver"`
+	Sequence  int       `json:"sequence"`
+	IsSigner  bool      `json:"is_signer"`
+	Approver  Approver  `json:"approver"`
+	Status    string    `json:"status"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Message   string    `json:"message"`
 }
 
 type ApprovalRequestAttachment struct {
