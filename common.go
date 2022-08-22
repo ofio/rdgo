@@ -279,9 +279,7 @@ type Data struct {
 		Data map[string]string `json:"data"`
 	} `json:"business_integration"`
 	ApprovalRequest []ApprovalRequest `json:"approval_request"`
-	EmailTemplate   []struct {
-		ID int `json:"id"`
-	} `json:"email_template"`
+	EmailTemplate   []EmailTemplate   `json:"email_template"`
 }
 
 type Hasuraerror struct {
