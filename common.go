@@ -308,3 +308,9 @@ type EmailTemplate struct {
 	ID       int    `json:"id"`
 	Template string `json:"template"`
 }
+
+type EmailTemplateRequestBody struct {
+	EmailTemplate  int                               `json:"email_template,omitempty"`
+	QueryVariables map[string]interface{}            `json:"query_variables,omitempty"`
+	WhereExp       map[string]map[string]interface{} `json:"where_exp,omitempty"`
+}
