@@ -45,9 +45,10 @@ type Contract struct {
 }
 
 type Instance struct {
+	ID               int                `json:"id"`
 	InstanceSettings []InstanceSettings `json:"instance_settings"`
+	Business         Business           `json:"business"`
 }
-
 type InstanceSettings struct {
 	BrandingLogoUUID string `json:"branding_logo_uuid"`
 }
@@ -286,6 +287,7 @@ type Data struct {
 	} `json:"business_integration"`
 	ApprovalRequest []ApprovalRequest `json:"approval_request"`
 	EmailTemplate   []EmailTemplate   `json:"email_template"`
+	Instance        []Instance        `json:"instance"`
 }
 
 type Hasuraerror struct {
