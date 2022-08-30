@@ -198,9 +198,10 @@ type InstanceSetting struct {
 	BrandingLogoUUID string `json:"branding_logo_uuid"`
 }
 type ApprovalRequest struct {
-	UUID     string `json:"uuid"`
-	Id       int    `json:"id"`
-	Instance struct {
+	UUID       string `json:"uuid"`
+	ObjectUUID string `json:"object_uuid"`
+	Id         int    `json:"id"`
+	Instance   struct {
 		ID               int               `json:"id"`
 		InstanceSettings []InstanceSetting `json:"instance_settings"`
 		Business         Business          `json:"business"`
