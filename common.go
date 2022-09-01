@@ -228,6 +228,7 @@ type Business struct {
 type Approver struct {
 	Email string `json:"email"`
 	Name  string `json:"name"`
+	ID    int    `json:"id"`
 }
 
 type ApprovalRequestApprover struct {
