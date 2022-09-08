@@ -45,7 +45,7 @@ type RequestFile struct {
 }
 
 type RequestBody struct {
-	ApprovalRequest int    `json:"request,omitempty"`
+	ApprovalRequest *int   `json:"request,omitempty"`
 	Code            string `json:"code,omitempty"`
 	Api             string `json:"api,omitempty"`
 }
