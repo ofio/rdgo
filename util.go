@@ -5,7 +5,10 @@ import (
 	"bytes"
 	"compress/gzip"
 	"context"
+	"crypto/rsa"
+	"crypto/x509"
 	"encoding/json"
+	"encoding/pem"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -13,13 +16,100 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 
 	"cloud.google.com/go/storage"
+	"github.com/golang-jwt/jwt/v4"
 	uuid "github.com/satori/go.uuid"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 )
+
+//verifyToken verifies jws signature
+func verifyToken(token string, rootPEM string) (bool, *rsa.PublicKey, error) {
+	block, _ := pem.Decode([]byte(rootPEM))
+	if block == nil || block.Type != "CERTIFICATE" {
+		log.Fatal("failed to decode PEM block containing public key")
+	}
+	var cert *x509.Certificate
+	cert, _ = x509.ParseCertificate(block.Bytes)
+
+	pub := cert.PublicKey.(*rsa.PublicKey)
+	parts := strings.Split(token, ".")
+	err := jwt.SigningMethodRS256.Verify(strings.Join(parts[0:2], "."), parts[2], pub)
+	if err != nil {
+		return false, pub, nil
+	}
+	return true, pub, nil
+}
+
+func StandardAuth(r *http.Request, rootPEM string) (string, int, string, string, error) {
+	var uid string = ""
+	var iid int = -1
+	var tkn string = ""
+	var email string = ""
+
+	c := r.Header.Get("Authorization")
+	if len(c) < 10 {
+		return tkn, iid, uid, email, &MyError{"authorization header missing"}
+	} else {
+		// Get the JWT string from the cookie
+		tkn = strings.Replace(c, `Bearer `, "", -1)
+	}
+
+	isValid, pub, err := verifyToken(tkn, rootPEM)
+	if err != nil {
+		return tkn, iid, uid, email, &MyError{"cannot verify token"}
+	}
+
+	if !isValid {
+		return tkn, iid, uid, email, &MyError{"invalid token"}
+	}
+
+	claims := jwt.MapClaims{}
+	_, err = jwt.ParseWithClaims(tkn, claims, func(token *jwt.Token) (interface{}, error) {
+		return pub, nil
+	})
+	if err != nil {
+		return tkn, iid, uid, email, err
+	}
+
+	num, claimsOk := claims["https://hasura.io/jwt/claims"]
+	if !claimsOk {
+		return tkn, iid, uid, email, &MyError{"claims key missing"}
+	}
+
+	md, interfaceOk := num.(map[string]interface{})
+	if !interfaceOk {
+		return tkn, iid, uid, email, &MyError{"cannot type cast claims"}
+	}
+
+	uidstr, uidOk := md["x-hasura-user-id"]
+	if !uidOk {
+		return tkn, iid, uid, email, &MyError{"user id missing from claims"}
+	} else {
+		uid = uidstr.(string)
+	}
+
+	emailStr, emailStrOk := md["x-hasura-email"]
+	if !emailStrOk {
+		return tkn, iid, uid, email, &MyError{"email missing from claims"}
+	}
+	email = emailStr.(string)
+
+	iidStr, iidStrOk := md["x-hasura-instance-id"]
+	if !iidStrOk {
+		return tkn, iid, uid, email, &MyError{"instance id missing from claims"}
+	}
+
+	iid, err = strconv.Atoi(iidStr.(string))
+	if err != nil {
+		return "", -1, "", email, &MyError{"instance id missing from claims"}
+	}
+
+	return tkn, iid, uid, email, nil
+}
 
 func Objcheck(bucket, name string) bool {
 	client, err := google.DefaultClient(oauth2.NoContext,
