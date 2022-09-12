@@ -288,9 +288,31 @@ type Data struct {
 		Type string            `json:"type"`
 		Data map[string]string `json:"data"`
 	} `json:"business_integration"`
-	ApprovalRequest []ApprovalRequest `json:"approval_request"`
-	EmailTemplate   []EmailTemplate   `json:"email_template"`
-	Instance        []Instance        `json:"instance"`
+	ApprovalRequest            []ApprovalRequest            `json:"approval_request"`
+	EmailTemplate              []EmailTemplate              `json:"email_template"`
+	Instance                   []Instance                   `json:"instance"`
+	User                       []User                       `json:"user"`
+	DocumentGeneratorCondition []DocumentGeneratorCondition `json:"document_generator_condition"`
+}
+
+type Builder struct {
+	Fields    []interface{} `json:"fields"`
+	Operation string        `json:"operation"`
+}
+type DocumentGeneratorCondition struct {
+	ObjectType     string   `json:"object_type"`
+	Builder        Builder  `json:"builder"`
+	ConditionGql   string   `json:"condition_gql"`
+	QueryVariables []string `json:"query_variables"`
+	CreatedBy      string   `json:"created_by"`
+	UpdatedBy      string   `json:"updated_by"`
+}
+
+type Role struct {
+	Name string `json:"name"`
+}
+type User struct {
+	Role Role `json:"role"`
 }
 
 type Hasuraerror struct {
