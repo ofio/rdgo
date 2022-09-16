@@ -49,39 +49,41 @@ type Contract struct {
 }
 
 type Invoice struct {
-	AccountNumber       string     `json:"account_number"`
-	Amount              float64    `json:"amount"`
-	ApprovalStatus      string     `json:"approval_status"`
-	ApprovedAt          time.Time  `json:"approved_at"`
-	BankAccountName     string     `json:"bank_account_name"`
-	BankName            string     `json:"bank_name"`
-	BusinessAddress     string     `json:"business_address"`
-	BusinessID          int        `json:"business_id"`
-	BusinessName        string     `json:"business_name"`
-	BusinessPhone       string     `json:"business_phone"`
-	ChecksPayableTo     string     `json:"checks_payable_to"`
-	CreatedAt           time.Time  `json:"created_at"`
-	CreatedBy           string     `json:"created_by"`
-	CreatedByInstanceID int        `json:"created_by_instance_id"`
-	CreatedByUserJsonb  UserJsonb  `json:"created_by_user_jsonb"`
-	CurrencyCode        string     `json:"currency_code"`
-	ID                  int        `json:"id"`
-	ImportData          ImportData `json:"import_data"`
-	ImportStatus        string     `json:"import_status"`
-	InstanceID          int        `json:"instance_id"`
-	InvoiceNumber       string     `json:"invoice_number"`
-	PaidStatus          string     `json:"paid_status"`
-	PoNumber            string     `json:"po_number"`
-	RoutingNumber       string     `json:"routing_number"`
-	TermsAndConditions  string     `json:"terms_and_conditions"`
-	Type                string     `json:"type"`
-	UpdatedAt           time.Time  `json:"updated_at"`
-	UpdatedBy           string     `json:"updated_by"`
-	UpdatedByInstanceID int        `json:"updated_by_instance_id"`
-	UpdatedByUserJsonb  UserJsonb  `json:"updated_by_user_jsonb"`
-	UserEmail           string     `json:"user_email"`
-	UUID                string     `json:"uuid"`
-	ValidationStatus    string     `json:"validation_status"`
+	AccountNumber       string         `json:"account_number"`
+	Amount              float64        `json:"amount"`
+	ApprovalStatus      string         `json:"approval_status"`
+	ApprovedAt          time.Time      `json:"approved_at"`
+	BankAccountName     string         `json:"bank_account_name"`
+	BankName            string         `json:"bank_name"`
+	BusinessAddress     string         `json:"business_address"`
+	BusinessID          int            `json:"business_id"`
+	BusinessName        string         `json:"business_name"`
+	BusinessPhone       string         `json:"business_phone"`
+	ChecksPayableTo     string         `json:"checks_payable_to"`
+	CreatedAt           time.Time      `json:"created_at"`
+	CreatedBy           string         `json:"created_by"`
+	CreatedByInstanceID int            `json:"created_by_instance_id"`
+	CreatedByUserJsonb  UserJsonb      `json:"created_by_user_jsonb"`
+	CurrencyCode        string         `json:"currency_code"`
+	ID                  int            `json:"id"`
+	ImportData          ImportData     `json:"import_data"`
+	ImportStatus        string         `json:"import_status"`
+	InstanceID          int            `json:"instance_id"`
+	InvoiceNumber       string         `json:"invoice_number"`
+	PaidStatus          string         `json:"paid_status"`
+	PoNumber            string         `json:"po_number"`
+	RoutingNumber       string         `json:"routing_number"`
+	TermsAndConditions  string         `json:"terms_and_conditions"`
+	Type                string         `json:"type"`
+	UpdatedAt           time.Time      `json:"updated_at"`
+	UpdatedBy           string         `json:"updated_by"`
+	UpdatedByInstanceID int            `json:"updated_by_instance_id"`
+	UpdatedByUserJsonb  UserJsonb      `json:"updated_by_user_jsonb"`
+	UserEmail           string         `json:"user_email"`
+	UUID                string         `json:"uuid"`
+	ValidationStatus    string         `json:"validation_status"`
+	Instance            Instance       `json:"instance"`
+	InvoiceLines        []InvoiceLines `json:"invoice_lines"`
 }
 type ImportData struct {
 }
@@ -404,6 +406,17 @@ type PoLines struct {
 	Quantity        float64   `json:"quantity"`
 	NetPricePerUnit float64   `json:"net_price_per_unit"`
 	CommodityID     int       `json:"commodity_id"`
+}
+
+type InvoiceLines struct {
+	ID              int     `json:"id"`
+	LineNumber      int     `json:"line_number"`
+	ItemDescription string  `json:"item_description"`
+	Quantity        float64 `json:"quantity"`
+	UomCode         string  `json:"uom_code"`
+	ItemCode        string  `json:"item_code"`
+	UnitPrice       float64 `json:"unit_price"`
+	LineAmount      float64 `json:"line_amount"`
 }
 
 type Commodity struct {
