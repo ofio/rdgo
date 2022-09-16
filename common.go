@@ -48,7 +48,7 @@ type Contract struct {
 	ApprovalRequests        []ApprovalRequest      `json:"approval_requests"`
 }
 
-type invoiceChangeData struct {
+type Invoice struct {
 	AccountNumber       string     `json:"account_number"`
 	Amount              float64    `json:"amount"`
 	ApprovalStatus      string     `json:"approval_status"`
@@ -344,6 +344,7 @@ type Data struct {
 	User                       []User                       `json:"user"`
 	DocumentGeneratorCondition []DocumentGeneratorCondition `json:"document_generator_condition"`
 	PoHeader                   []PoHeader                   `json:"po_header"`
+	Invoice                    []Invoice                    `json:"invoice"`
 }
 
 type PoHeader struct {
