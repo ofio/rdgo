@@ -46,6 +46,8 @@ type Contract struct {
 	UUID                    string                 `json:"uuid"`
 	CurrencyCode            string                 `json:"currency_code"`
 	ApprovalRequests        []ApprovalRequest      `json:"approval_requests"`
+	PaymentSchedule         string                 `json:"payment_schedule"`
+	SignedDate              time.Time              `json:"signed_date"`
 }
 
 type Invoice struct {
