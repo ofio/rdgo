@@ -293,6 +293,94 @@ type Data struct {
 	Instance                   []Instance                   `json:"instance"`
 	User                       []User                       `json:"user"`
 	DocumentGeneratorCondition []DocumentGeneratorCondition `json:"document_generator_condition"`
+	PoHeader                   []PoHeader                   `json:"po_header"`
+}
+
+type PoHeader struct {
+	CurrencyCode          string           `json:"currency_code"`
+	PoNumber              string           `json:"po_number"`
+	PaymentTerms          string           `json:"payment_terms"`
+	Status                string           `json:"status"`
+	InvoicingInstructions string           `json:"invoicing_instructions"`
+	TermsAndConditions    string           `json:"terms_and_conditions"`
+	Notes                 string           `json:"notes"`
+	SoldToEntity          string           `json:"sold_to_entity"`
+	Instance              Instance         `json:"instance"`
+	DepartmentID          int              `json:"department_id"`
+	Rev                   int              `json:"rev"`
+	BuyerJsonb            BuyerJsonb       `json:"buyer_jsonb"`
+	RequesterJsonb        RequesterJsonb   `json:"requester_jsonb"`
+	SupplierContact       SupplierContact  `json:"supplier_contact"`
+	UpdatedAt             time.Time        `json:"updated_at"`
+	BusinessBillTo        BusinessBillTo   `json:"businessBillTo"`
+	BusinessShipTo        BusinessShipTo   `json:"businessShipTo"`
+	BusinessSupplier      BusinessSupplier `json:"businessSupplier"`
+	PoLines               []PoLines        `json:"po_lines"`
+	Contract              Contract         `json:"contract"`
+	Department            Department       `json:"department"`
+}
+
+type BusinessBillTo struct {
+	Name          string `json:"name"`
+	Address       string `json:"address"`
+	City          string `json:"city"`
+	StateProvince string `json:"state_province"`
+	PostalCode    string `json:"postal_code"`
+	Country       string `json:"country"`
+}
+type BusinessShipTo struct {
+	Name                  string `json:"name"`
+	ShippingAddress       string `json:"shipping_address"`
+	ShippingCity          string `json:"shipping_city"`
+	ShippingStateProvince string `json:"shipping_state_province"`
+	ShippingPostalCode    string `json:"shipping_postal_code"`
+	ShippingCountry       string `json:"shipping_country"`
+}
+type BusinessSupplier struct {
+	Name          string `json:"name"`
+	Address       string `json:"address"`
+	City          string `json:"city"`
+	StateProvince string `json:"state_province"`
+	PostalCode    string `json:"postal_code"`
+	Country       string `json:"country"`
+}
+
+type PoLines struct {
+	ID              int       `json:"id"`
+	LineNumber      int       `json:"line_number"`
+	Commodity       Commodity `json:"commodity"`
+	ItemDescription string    `json:"item_description"`
+	Quantity        float64   `json:"quantity"`
+	NetPricePerUnit float64   `json:"net_price_per_unit"`
+	CommodityID     int       `json:"commodity_id"`
+}
+
+type Commodity struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+type SupplierContact struct {
+	Name  string `json:"name"`
+	Email string `json:"email"`
+	Phone string `json:"phone"`
+}
+
+type BuyerJsonb struct {
+	ID         string `json:"id"`
+	Name       string `json:"name"`
+	UUID       string `json:"uuid"`
+	Email      string `json:"email"`
+	Typename   string `json:"__typename"`
+	InstanceID int    `json:"instance_id"`
+}
+
+type RequesterJsonb struct {
+	ID         string `json:"id"`
+	Name       string `json:"name"`
+	UUID       string `json:"uuid"`
+	Email      string `json:"email"`
+	Typename   string `json:"__typename"`
+	InstanceID int    `json:"instance_id"`
 }
 
 type Builder struct {
