@@ -7,6 +7,10 @@ import (
 	"gopkg.in/guregu/null.v4"
 )
 
+func NewError() error {
+	return nil
+}
+
 type ContractQuery struct {
 	ExternalID string `json:"external_id"`
 }
@@ -44,6 +48,52 @@ type Contract struct {
 	ApprovalRequests        []ApprovalRequest      `json:"approval_requests"`
 }
 
+type invoiceChangeData struct {
+	AccountNumber       string     `json:"account_number"`
+	Amount              float64    `json:"amount"`
+	ApprovalStatus      string     `json:"approval_status"`
+	ApprovedAt          time.Time  `json:"approved_at"`
+	BankAccountName     string     `json:"bank_account_name"`
+	BankName            string     `json:"bank_name"`
+	BusinessAddress     string     `json:"business_address"`
+	BusinessID          int        `json:"business_id"`
+	BusinessName        string     `json:"business_name"`
+	BusinessPhone       string     `json:"business_phone"`
+	ChecksPayableTo     string     `json:"checks_payable_to"`
+	CreatedAt           time.Time  `json:"created_at"`
+	CreatedBy           string     `json:"created_by"`
+	CreatedByInstanceID int        `json:"created_by_instance_id"`
+	CreatedByUserJsonb  UserJsonb  `json:"created_by_user_jsonb"`
+	CurrencyCode        string     `json:"currency_code"`
+	ID                  int        `json:"id"`
+	ImportData          ImportData `json:"import_data"`
+	ImportStatus        string     `json:"import_status"`
+	InstanceID          int        `json:"instance_id"`
+	InvoiceNumber       string     `json:"invoice_number"`
+	PaidStatus          string     `json:"paid_status"`
+	PoNumber            string     `json:"po_number"`
+	RoutingNumber       string     `json:"routing_number"`
+	TermsAndConditions  string     `json:"terms_and_conditions"`
+	Type                string     `json:"type"`
+	UpdatedAt           time.Time  `json:"updated_at"`
+	UpdatedBy           string     `json:"updated_by"`
+	UpdatedByInstanceID int        `json:"updated_by_instance_id"`
+	UpdatedByUserJsonb  UserJsonb  `json:"updated_by_user_jsonb"`
+	UserEmail           string     `json:"user_email"`
+	UUID                string     `json:"uuid"`
+	ValidationStatus    string     `json:"validation_status"`
+}
+type ImportData struct {
+}
+
+type UserJsonb struct {
+	Email      string `json:"email"`
+	UUID       string `json:"uuid"`
+	InstanceID int    `json:"instance_id"`
+	Name       string `json:"name"`
+	Typename   string `json:"__typename"`
+	ID         string `json:"id"`
+}
 type Instance struct {
 	ID               int                `json:"id"`
 	InstanceSettings []InstanceSettings `json:"instance_settings"`
