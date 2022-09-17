@@ -342,6 +342,7 @@ func queryInvoice(instance int, invoiceID int, revision int, token string, xHasu
 	queryPO := `query invoice($instance_id: Int!, $id: Int!) {
 		invoice(where: {_and: {}, instance_id: {_eq: $instance_id}, id: {_eq: $id}}) {
 			currency_code
+			business_id
 			po_number
 			type
 			po_number
@@ -367,6 +368,15 @@ func queryInvoice(instance int, invoiceID int, revision int, token string, xHasu
 				}
 			}
 			updated_at
+			business {
+				id
+				name
+				city
+				country
+				state_province
+				postal_code
+				phone
+			}
 			invoice_lines(order_by: {line_number: asc}) {
 				id
 				line_number
@@ -375,15 +385,6 @@ func queryInvoice(instance int, invoiceID int, revision int, token string, xHasu
 				uom_code
 				item_code
 			}
-		}
-		business {
-			id
-			name
-			city
-			country
-			state_province
-			postal_code
-			phone
 		}
 	}	
 	`
