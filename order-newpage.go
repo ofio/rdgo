@@ -61,9 +61,9 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 		yLocLeft += (lineHeight * 3)
 		createContacts(buyerItems, contactColumnWidths, lineHeight, pdf, firstColumnWidth)
 	}
-	vendorItems := [][]string{}{}
+	vendorItems := [][]string{}
 	if isInvoice {
-		vendorItems := [][]string{
+		vendorItems = [][]string{
 			{"Business"},
 			{"Name", invoice.Business.Name},
 			{"Address", invoice.Business.Address},
@@ -73,8 +73,8 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 			{"Email", invoice.UserEmail},
 		}
 		yLocLeft += (lineHeight * 7)
-	}else{
-		vendorItems := [][]string{
+	} else {
+		vendorItems = [][]string{
 			{"Supplier"},
 			{"Name", po.BusinessSupplier.Name},
 			{"Address", po.BusinessSupplier.Address},
@@ -85,7 +85,6 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 		}
 		yLocLeft += (lineHeight * 7)
 	}
-
 
 	if len(po.SupplierContact.Phone) > 0 {
 		vendorItems = append(vendorItems, []string{"Phone", po.SupplierContact.Phone})

@@ -277,8 +277,13 @@ type ApprovalRequest struct {
 	CoverPage bool `json:"cover_page"`
 }
 type Business struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+	ID            int    `json:"id"`
+	Name          string `json:"name"`
+	Address       string `json:"address"`
+	City          string `json:"city"`
+	StateProvince string `json:"state_province"`
+	PostalCode    string `json:"postal_code"`
+	Country       string `json:"country"`
 }
 type Approver struct {
 	Email string `json:"email"`
