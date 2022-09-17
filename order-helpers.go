@@ -401,7 +401,7 @@ func queryInvoice(instance int, invoiceNumber string, revision int, token string
 	return invoice, nil
 }
 
-func InvoicePurchaseOrderHandler(instance int, number string, revision int, token string, adminSecret string, hasuraEndpoint string, isInvoice bool, bucket string) ([]byte, string, error) {
+func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, number string, revision int, token string, adminSecret string, hasuraEndpoint string, isInvoice bool, bucket string) ([]byte, string, error) {
 	poHeader := PoHeader{}
 	invoice := Invoice{}
 
@@ -439,7 +439,7 @@ func InvoicePurchaseOrderHandler(instance int, number string, revision int, toke
 	}
 
 	var pdfb []byte
-	pdfb, err = CreatePurchaseOrderInvoice(poHeader, invoice, isInvoice, &logob)
+	pdfb, err = CreatePurchaseOrderInvoice(pdf, poHeader, invoice, isInvoice, &logob)
 	if err != nil {
 		fmt.Println(err)
 		return nil, "", err
@@ -461,19 +461,8 @@ func createLogo(pdf *gopdf.Fpdf, bc []byte, mleft float64, mtop float64, imageNa
 	createBusinessLogo()
 }
 
-func CreatePurchaseOrderInvoice(po PoHeader, invoice Invoice, isInvoice bool, logob *[]byte) ([]byte, error) {
+func CreatePurchaseOrderInvoice(pdf *gopdf.Fpdf, po PoHeader, invoice Invoice, isInvoice bool, logob *[]byte) ([]byte, error) {
 	var err error
-	pdf := gopdf.New("P", "mm", "A4", "")
-	pdf.SetTitle("Cover Page", true)
-	pdf.SetAuthor("Raindrop", true)
-	pdf.SetSubject("Cover Page", true)
-	pdf.SetCreator("Raindrop", true)
-	pdf.SetDisplayMode("fullpage", "single")
-	pdf.AddFont("GothamHTF", "Medium", "fonts/GothamHTF-Medium.json")
-	pdf.AddFont("GothamHTF", "Bold", "fonts/GothamHTF-Bold.json")
-	pdf.AddFont("GothamHTF", "Book", "fonts/GothamHTF-Book.json")
-	pdf.SetFont("GothamHTF", "Medium", 14)
-	pdf.SetFillColor(240, 240, 240)
 
 	lc := accounting.LocaleInfo[po.CurrencyCode]
 

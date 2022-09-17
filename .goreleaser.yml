@@ -13,6 +13,9 @@ builds:
       - linux
       - windows
       - darwin
+includes:
+  - from_file:
+      path: ./config/goreleaser.yaml
 archives:
   - replacements:
       darwin: Darwin
