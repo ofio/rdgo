@@ -61,17 +61,31 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 		yLocLeft += (lineHeight * 3)
 		createContacts(buyerItems, contactColumnWidths, lineHeight, pdf, firstColumnWidth)
 	}
-
-	vendorItems := [][]string{
-		{"Supplier"},
-		{"Name", po.BusinessSupplier.Name},
-		{"Address", po.BusinessSupplier.Address},
-		{"", po.BusinessSupplier.City + ", " + po.BusinessSupplier.StateProvince + " " + po.BusinessSupplier.PostalCode},
-		{"", po.BusinessSupplier.Country},
-		{"Contact", po.SupplierContact.Name},
-		{"Email", po.SupplierContact.Email},
+	vendorItems := [][]string{}{}
+	if isInvoice {
+		vendorItems := [][]string{
+			{"Business"},
+			{"Name", invoice.Business.Name},
+			{"Address", invoice.Business.Address},
+			{"", invoice.Business.City + ", " + invoice.Business.StateProvince + " " + invoice.Business.PostalCode},
+			{"", po.BusinessSupplier.Country},
+			{"Phone", invoice.BusinessPhone},
+			{"Email", invoice.UserEmail},
+		}
+		yLocLeft += (lineHeight * 7)
+	}else{
+		vendorItems := [][]string{
+			{"Supplier"},
+			{"Name", po.BusinessSupplier.Name},
+			{"Address", po.BusinessSupplier.Address},
+			{"", po.BusinessSupplier.City + ", " + po.BusinessSupplier.StateProvince + " " + po.BusinessSupplier.PostalCode},
+			{"", po.BusinessSupplier.Country},
+			{"Contact", po.SupplierContact.Name},
+			{"Email", po.SupplierContact.Email},
+		}
+		yLocLeft += (lineHeight * 7)
 	}
-	yLocLeft += (lineHeight * 7)
+
 
 	if len(po.SupplierContact.Phone) > 0 {
 		vendorItems = append(vendorItems, []string{"Phone", po.SupplierContact.Phone})
