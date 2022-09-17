@@ -1,14 +1,13 @@
-package main
+package rdgo
 
 import (
 	"strconv"
 
 	"github.com/leekchan/accounting"
 	gopdf "github.com/ofio/gopdf"
-	"github.com/ofio/rdgo"
 )
 
-func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte, mleft, mtop, lineHeight, unitPriceWidth, totalPriceWidth, quantityWidth, sumWidth float64, cols []float64, lineItems [][]string, po rdgo.PoHeader, invoice rdgo.Invoice, isInvoice bool) {
+func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte, mleft, mtop, lineHeight, unitPriceWidth, totalPriceWidth, quantityWidth, sumWidth float64, cols []float64, lineItems [][]string, po PoHeader, invoice Invoice, isInvoice bool) {
 	yLocLeft := mtop
 	if len(logob) <= 0 {
 		businessName := ""
