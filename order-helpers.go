@@ -338,7 +338,7 @@ func queryPurchaseOrder(instance int, poNumber string, revision int, token strin
 	return purchaseOrder, nil
 }
 
-func queryInvoice(instance int, invoiceID string, revision int, token string, xHasuraAdminSecret string, HasuraEndpoint string) (Invoice, error) {
+func queryInvoice(instance int, invoiceID int, revision int, token string, xHasuraAdminSecret string, HasuraEndpoint string) (Invoice, error) {
 	queryPO := `query invoice($instance_id: Int!, $id: Int!) {
 		invoice(where: {_and: {}, instance_id: {_eq: $instance_id}, id: {_eq: $id}}) {
 			currency_code
@@ -401,7 +401,7 @@ func queryInvoice(instance int, invoiceID string, revision int, token string, xH
 	return invoice, nil
 }
 
-func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, number string, revision int, token string, adminSecret string, hasuraEndpoint string, isInvoice bool, bucket string) ([]byte, string, error) {
+func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, number string, invoiceID int, revision int, token string, adminSecret string, hasuraEndpoint string, isInvoice bool, bucket string) ([]byte, string, error) {
 	poHeader := PoHeader{}
 	invoice := Invoice{}
 
@@ -409,7 +409,7 @@ func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, number string, r
 	brandingLogoUUID := ""
 	err := NewError()
 	if isInvoice {
-		invoice, err = queryInvoice(instance, number, revision, token, adminSecret, hasuraEndpoint)
+		invoice, err = queryInvoice(instance, invoiceID, revision, token, adminSecret, hasuraEndpoint)
 		if err != nil {
 			fmt.Println(err)
 			return nil, "", err
