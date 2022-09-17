@@ -68,7 +68,7 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 			{"Name", invoice.Business.Name},
 			{"Address", invoice.Business.Address},
 			{"", invoice.Business.City + ", " + invoice.Business.StateProvince + " " + invoice.Business.PostalCode},
-			{"", po.BusinessSupplier.Country},
+			{"", invoice.Business.Country},
 			{"Phone", invoice.BusinessPhone},
 			{"Email", invoice.UserEmail},
 		}
