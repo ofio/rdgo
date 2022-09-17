@@ -86,6 +86,7 @@ type Invoice struct {
 	ValidationStatus    string         `json:"validation_status"`
 	Instance            Instance       `json:"instance"`
 	InvoiceLines        []InvoiceLines `json:"invoice_lines"`
+	Business            Business       `json:"business"`
 }
 type ImportData struct {
 }

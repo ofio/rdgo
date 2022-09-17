@@ -348,11 +348,14 @@ func queryInvoice(instance int, invoiceID int, revision int, token string, xHasu
 			amount
 			approved_at
 			bank_name
+			checks_payable_to
+			business_phone
 			routing_number
 			account_number
 			import_status
 			import_data
 			status
+			invoice_number
 			terms_and_conditions
 			instance {
 				business {
@@ -372,6 +375,15 @@ func queryInvoice(instance int, invoiceID int, revision int, token string, xHasu
 				uom_code
 				item_code
 			}
+		}
+		business {
+			id
+			name
+			city
+			country
+			state_province
+			postal_code
+			phone
 		}
 	}	
 	`
@@ -401,7 +413,7 @@ func queryInvoice(instance int, invoiceID int, revision int, token string, xHasu
 	return invoice, nil
 }
 
-func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, number string, invoiceID int, revision int, token string, adminSecret string, hasuraEndpoint string, isInvoice bool, bucket string) ([]byte, string, error) {
+func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, poNumber string, invoiceID int, revision int, token string, adminSecret string, hasuraEndpoint string, isInvoice bool, bucket string) ([]byte, string, error) {
 	poHeader := PoHeader{}
 	invoice := Invoice{}
 
@@ -417,9 +429,9 @@ func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, number string, i
 		for _, settings := range invoice.Instance.InstanceSettings {
 			brandingLogoUUID = settings.BrandingLogoUUID
 		}
-		fileName = "Invoice " + poHeader.SupplierContact.Name + " " + number + ".pdf"
+		fileName = "Invoice " + poHeader.SupplierContact.Name + " " + invoice.InvoiceNumber + ".pdf"
 	} else {
-		poHeader, err = queryPurchaseOrder(instance, number, revision, token, adminSecret, hasuraEndpoint)
+		poHeader, err = queryPurchaseOrder(instance, poNumber, revision, token, adminSecret, hasuraEndpoint)
 		if err != nil {
 			fmt.Println(err)
 			return nil, "", err
@@ -427,7 +439,7 @@ func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, number string, i
 		for _, settings := range poHeader.Instance.InstanceSettings {
 			brandingLogoUUID = settings.BrandingLogoUUID
 		}
-		fileName = "PO " + poHeader.SupplierContact.Name + " " + number + " Rev " + strconv.Itoa(revision) + ".pdf"
+		fileName = "PO " + poHeader.SupplierContact.Name + " " + poNumber + " Rev " + strconv.Itoa(revision) + ".pdf"
 	}
 
 	var logob []byte
