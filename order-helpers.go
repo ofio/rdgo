@@ -338,9 +338,9 @@ func queryPurchaseOrder(instance int, poNumber string, revision int, token strin
 	return purchaseOrder, nil
 }
 
-func queryInvoice(instance int, invoiceNumber string, revision int, token string, xHasuraAdminSecret string, HasuraEndpoint string) (Invoice, error) {
-	queryPO := `query invoice($instance_id: Int, $invoice_number: String) {
-		invoice(where: {_and: {}, instance_id: {_eq: $instance_id}, invoice_number: {_eq: $invoice_number}}) {
+func queryInvoice(instance int, invoiceID string, revision int, token string, xHasuraAdminSecret string, HasuraEndpoint string) (Invoice, error) {
+	queryPO := `query invoice($instance_id: Int!, $id: Int!) {
+		invoice(where: {_and: {}, instance_id: {_eq: $instance_id}, id: {_eq: $id}}) {
 			currency_code
 			po_number
 			type
@@ -377,7 +377,7 @@ func queryInvoice(instance int, invoiceNumber string, revision int, token string
 	`
 
 	invoice := Invoice{}
-	queryVar := map[string]interface{}{"instance_id": instance, "invoice_number": invoiceNumber}
+	queryVar := map[string]interface{}{"instance_id": instance, "id": invoiceID}
 	smartResponseData := Responsedata{}
 	err := NewError()
 	if len(xHasuraAdminSecret) > 0 {
