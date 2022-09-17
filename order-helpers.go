@@ -421,7 +421,7 @@ func queryInvoice(instance int, invoiceNumber string, revision int, token string
 	`
 
 	invoice := Invoice{}
-	queryVar := map[string]interface{}{"rev": revision, "instance_id": instance, "invoice_number": invoiceNumber}
+	queryVar := map[string]interface{}{"instance_id": instance, "invoice_number": invoiceNumber}
 	smartResponseData := Responsedata{}
 	err := NewError()
 	if len(xHasuraAdminSecret) > 0 {
