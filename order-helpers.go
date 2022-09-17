@@ -370,6 +370,7 @@ func queryInvoice(instance int, invoiceID int, revision int, token string, xHasu
 			updated_at
 			business {
 				id
+				address
 				name
 				city
 				country
