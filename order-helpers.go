@@ -339,17 +339,21 @@ func queryPurchaseOrder(instance int, poNumber string, revision int, token strin
 }
 
 func queryInvoice(instance int, invoiceNumber string, revision int, token string, xHasuraAdminSecret string, HasuraEndpoint string) (Invoice, error) {
-	queryPO := `query purchaseOrder($rev: Int, $instance_id: Int, $po_number: String) {
-		po_header(where: {_and: {}, rev: {_eq: $rev}, instance_id: {_eq: $instance_id}, po_number: {_eq: $po_number}}) {
+	queryPO := `query invoice($instance_id: Int, $invoice_number: String) {
+		invoice(where: {_and: {}, instance_id: {_eq: $instance_id}, invoice_number: {_eq: $invoice_number}}) {
 			currency_code
 			po_number
-			payment_terms
+			type
+			po_number
+			amount
+			approved_at
+			bank_name
+			routing_number
+			account_number
+			import_status
+			import_data
 			status
-			invoicing_instructions
 			terms_and_conditions
-			notes
-			department_id
-			sold_to_entity
 			instance {
 				business {
 					name
@@ -359,62 +363,14 @@ func queryInvoice(instance int, invoiceNumber string, revision int, token string
 					branding_logo_uuid
 				}
 			}
-			department_id
-			rev
-			buyer_jsonb
-			requester_jsonb
-			supplier_contact {
-				name
-				email
-			}
 			updated_at
-			businessBillTo {
-				name
-				address
-				city
-				state_province
-				postal_code
-				country
-			}
-			businessShipTo {
-				name
-				shipping_address
-				shipping_city
-				shipping_state_province
-				shipping_postal_code
-				shipping_country
-			}
-			businessSupplier {
-				name
-				address
-				city
-				state_province
-				postal_code
-				country
-			}
-			department {
+			invoice_lines(order_by: {line_number: asc}) {
 				id
-				name
-			}
-			po_lines(order_by: {line_number: asc}) {
-				id
-				commodity {
-					id
-					name
-				}
 				line_number
 				item_description
 				quantity
-				net_price_per_unit
-				commodity_id
-			}
-			contract {
-				name
-				effective_date
-				end_date
-				renewal_type
-				payment_schedule
-				signed_date
+				uom_code
+				item_code
 			}
 		}
 	}	
