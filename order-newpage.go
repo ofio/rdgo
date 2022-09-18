@@ -69,10 +69,16 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 			{"Address", invoice.Business.Address},
 			{"", invoice.Business.City + ", " + invoice.Business.StateProvince + " " + invoice.Business.PostalCode},
 			{"", invoice.Business.Country},
-			{"Phone", invoice.BusinessPhone},
-			{"Email", invoice.UserEmail},
 		}
-		yLocLeft += (lineHeight * 7)
+		yLocLeft += (lineHeight * 5)
+		if len(invoice.BusinessPhone) > 0 {
+			vendorItems = append(vendorItems, []string{"Phone", invoice.BusinessPhone})
+			yLocLeft += (lineHeight * 1)
+		}
+		if len(invoice.UserEmail) > 0 {
+			vendorItems = append(vendorItems, []string{"Email", invoice.UserEmail})
+			yLocLeft += (lineHeight * 1)
+		}
 	} else {
 		vendorItems = [][]string{
 			{"Supplier"},
@@ -80,15 +86,20 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 			{"Address", po.BusinessSupplier.Address},
 			{"", po.BusinessSupplier.City + ", " + po.BusinessSupplier.StateProvince + " " + po.BusinessSupplier.PostalCode},
 			{"", po.BusinessSupplier.Country},
-			{"Contact", po.SupplierContact.Name},
-			{"Email", po.SupplierContact.Email},
 		}
-		yLocLeft += (lineHeight * 7)
-	}
-
-	if len(po.SupplierContact.Phone) > 0 {
-		vendorItems = append(vendorItems, []string{"Phone", po.SupplierContact.Phone})
-		yLocLeft += (lineHeight)
+		yLocLeft += (lineHeight * 5)
+		if len(po.SupplierContact.Name) > 0 {
+			vendorItems = append(vendorItems, []string{"Contact", po.SupplierContact.Name})
+			yLocLeft += (lineHeight * 1)
+		}
+		if len(po.SupplierContact.Email) > 0 {
+			vendorItems = append(vendorItems, []string{"Email", po.SupplierContact.Email})
+			yLocLeft += (lineHeight * 1)
+		}
+		if len(po.SupplierContact.Phone) > 0 {
+			vendorItems = append(vendorItems, []string{"Phone", po.SupplierContact.Phone})
+			yLocLeft += (lineHeight)
+		}
 	}
 
 	createContacts(vendorItems, contactColumnWidths, lineHeight, pdf, firstColumnWidth)
@@ -131,7 +142,7 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 	orderRevCols := []float64{revWidth, revWidth, revWidth, revWidth}
 	orderRevisionDetails := [][]string{}
 	if isInvoice {
-		orderRevisionDetails = append(orderRevisionDetails, []string{"Order", invoice.InvoiceNumber, "", ""})
+		//orderRevisionDetails = append(orderRevisionDetails, []string{"Order", invoice.InvoiceNumber, "", ""})
 	} else {
 		orderRevisionDetails = append(orderRevisionDetails, []string{"Order", po.PoNumber, "Revision", strconv.Itoa(po.Rev)})
 	}
@@ -141,9 +152,18 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 
 	//		{"Order", strconv.Itoa(po.PONumber),"Revision", strconv.Itoa(po.Rev)},
 	poCols := []float64{revWidth * 2, revWidth * 2}
-	poHeaderItems := [][]string{
-		{"Date", po.UpdatedAt.Format("January 2, 2006")},
-		{"Payment Terms", po.PaymentTerms},
+
+	poHeaderItems := [][]string{}
+	if isInvoice {
+		poHeaderItems = [][]string{
+			{"Order", invoice.InvoiceNumber},
+			{"Date", invoice.UpdatedAt.Format("January 2, 2006")},
+		}
+	} else {
+		poHeaderItems = [][]string{
+			{"Date", po.UpdatedAt.Format("January 2, 2006")},
+			{"Payment Terms", po.PaymentTerms},
+		}
 	}
 
 	createPOHeaderItems(pdf, poHeaderItems, poCols, lineHeight, mleft, mtop, sumWidth, secondColumnXLoc)

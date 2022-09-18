@@ -348,6 +348,7 @@ func queryInvoice(instance int, invoiceID int, revision int, token string, xHasu
 			po_number
 			amount
 			approved_at
+			updated_at
 			bank_name
 			checks_payable_to
 			business_phone
