@@ -64,7 +64,7 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 	vendorItems := [][]string{}
 	if isInvoice {
 		vendorItems = [][]string{
-			{"Business"},
+			{"Supplier"},
 			{"Name", invoice.Business.Name},
 			{"Address", invoice.Business.Address},
 			{"", invoice.Business.City + ", " + invoice.Business.StateProvince + " " + invoice.Business.PostalCode},
