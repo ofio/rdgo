@@ -381,6 +381,7 @@ type PoHeader struct {
 	Contract              Contract         `json:"contract"`
 	Department            Department       `json:"department"`
 	ID                    int              `json:"id"`
+	CreatedBy             string           `json:"created_by"`
 }
 
 type BusinessBillTo struct {

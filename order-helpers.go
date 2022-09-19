@@ -239,6 +239,7 @@ func queryPurchaseOrder(instance int, poNumber string, revision int, token strin
 			id
 			uuid
 			currency_code
+			created_by
 			po_number
 			payment_terms
 			status
@@ -346,6 +347,7 @@ func queryInvoice(invoiceID int, revision int, token string, xHasuraAdminSecret 
 	queryPO := `query invoice($id: Int!) {
 		invoice(where: {id: {_eq: $id}}) {
 			id
+			created_by
 			currency_code
 			business_id
 			po_number
@@ -421,7 +423,7 @@ func queryInvoice(invoiceID int, revision int, token string, xHasuraAdminSecret 
 	return invoice, nil
 }
 
-func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, uid string, instance int, poNumber string, invoiceID int, revision int, token string, adminSecret string, hasuraEndpoint string, isInvoice bool, bucket string, publicBucket string, saveAttachment bool) ([]byte, string, error) {
+func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, poNumber string, invoiceID int, revision int, token string, adminSecret string, hasuraEndpoint string, isInvoice bool, bucket string, publicBucket string, saveAttachment bool) ([]byte, string, error) {
 	poHeader := PoHeader{}
 	invoice := Invoice{}
 
@@ -429,7 +431,7 @@ func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, uid string, instance int, poNu
 	brandingLogoUUID := ""
 	err := NewError()
 	objectID := -1
-
+	createdBy := ""
 	if isInvoice {
 		invoice, err = queryInvoice(invoiceID, revision, token, adminSecret, hasuraEndpoint)
 		if err != nil {
@@ -439,8 +441,9 @@ func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, uid string, instance int, poNu
 		for _, settings := range invoice.Instance.InstanceSettings {
 			brandingLogoUUID = settings.BrandingLogoUUID
 		}
-		fileName = "Invoice " + poHeader.SupplierContact.Name + " " + invoice.InvoiceNumber + ".pdf"
+		fileName = "Invoice " + invoice.InvoiceNumber + " " + invoice.BusinessName + ".pdf"
 		objectID = invoice.ID
+		createdBy = invoice.CreatedBy
 	} else {
 		poHeader, err = queryPurchaseOrder(instance, poNumber, revision, token, adminSecret, hasuraEndpoint)
 		if err != nil {
@@ -450,8 +453,9 @@ func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, uid string, instance int, poNu
 		for _, settings := range poHeader.Instance.InstanceSettings {
 			brandingLogoUUID = settings.BrandingLogoUUID
 		}
-		fileName = "PO " + poHeader.SupplierContact.Name + " " + poNumber + " Rev " + strconv.Itoa(revision) + ".pdf"
+		fileName = "PO " + poNumber + " Rev " + strconv.Itoa(revision) + " " + poHeader.BusinessSupplier.Name + ".pdf"
 		objectID = poHeader.ID
+		createdBy = poHeader.CreatedBy
 	}
 
 	var logob []byte
@@ -470,77 +474,84 @@ func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, uid string, instance int, poNu
 	}
 
 	if saveAttachment {
-		uuid := uuid.NewV4().String()
-		if isInvoice {
-			queryInvoiceAttachment := `query invoice_attachment($invoice_id: Int!) {
-				invoice_attachment(where: { invoice_id: { _eq: $invoice_id }, is_deleted: { _eq: false } }) {
-					uuid
-					name
-					generation
-				}
-			}
-			`
-			queryVar := map[string]interface{}{"invoice_id": objectID}
-			smartResponseData, err := SmartQuery(queryInvoiceAttachment, queryVar, hasuraEndpoint, "", token)
-			if err != nil {
-				log.Println("query error", err)
-				return []byte{}, "", err
-			}
-
-			existingAttachment := Attachment{}
-			for _, attachment := range smartResponseData.Data.InvoiceAttachment {
-				existingAttachment = attachment
-			}
-
-			if len(existingAttachment.UUID) > 0 {
-				uuid = existingAttachment.UUID
-			}
-
-			id, uuid, gen, err := FileUpsert(bufio.NewReader(bytes.NewReader(pdfb)), instance, fileName, "application/pdf", uid, uuid, objectID, bucket, "invoice", hasuraEndpoint, adminSecret, "", instance, instance, "invoice_attachment_pkey")
-			if err != nil {
-				log.Println("upsert error", err)
-				return []byte{}, "", err
-			}
-			log.Println("file upserted: ", id, uuid, gen)
-
-		} else {
-
-			queryInvoiceAttachment := `query po_header_attachment($po_header_id: Int!) {
-				po_header_attachment(where: {po_header_id: {_eq: $po_header_id}, is_purchase_order: {_eq: true}, is_deleted: {_eq: false}}) {
-					uuid
-					name
-					generation
-				}
-			}
-			`
-			queryVar := map[string]interface{}{"po_header_id": objectID}
-			smartResponseData, err := SmartQuery(queryInvoiceAttachment, queryVar, hasuraEndpoint, "", token)
-			if err != nil {
-				log.Println("query error", err)
-				return []byte{}, "", err
-			}
-
-			existingAttachment := Attachment{}
-			for _, attachment := range smartResponseData.Data.InvoiceAttachment {
-				existingAttachment = attachment
-			}
-
-			if len(existingAttachment.UUID) > 0 {
-				uuid = existingAttachment.UUID
-			}
-
-			id, uuid, gen, err := FileUpsert(bufio.NewReader(bytes.NewReader(pdfb)), instance, fileName, "application/pdf", uid, uuid, objectID, bucket, "po_header", hasuraEndpoint, adminSecret, "", instance, instance, "po_header_attachment_pkey")
-			if err != nil {
-				log.Println("upsert error", err)
-				return []byte{}, "", err
-			}
-			log.Println("file upserted: ", id, uuid, gen)
+		err := savePDFAttachment(pdfb, objectID, createdBy, fileName, instance, isInvoice, hasuraEndpoint, adminSecret, token, bucket)
+		if err != nil {
+			fmt.Println(err)
+			return nil, "", err
 		}
 	}
 
 	return pdfb, fileName, nil
 }
 
+func savePDFAttachment(pdfb []byte, objectID int, createdBy string, fileName string, instance int, isInvoice bool, hasuraEndpoint string, adminSecret string, token string, bucket string) error {
+	uuid := uuid.NewV4().String()
+	if isInvoice {
+		queryInvoiceAttachment := `query invoice_attachment($invoice_id: Int!) {
+			invoice_attachment(where: { invoice_id: { _eq: $invoice_id }, is_deleted: { _eq: false } }) {
+				uuid
+				name
+				generation
+			}
+		}
+		`
+		queryVar := map[string]interface{}{"invoice_id": objectID}
+		smartResponseData, err := SmartQuery(queryInvoiceAttachment, queryVar, hasuraEndpoint, "", token)
+		if err != nil {
+			log.Println("query error", err)
+			return err
+		}
+
+		existingAttachment := Attachment{}
+		for _, attachment := range smartResponseData.Data.InvoiceAttachment {
+			existingAttachment = attachment
+		}
+
+		if len(existingAttachment.UUID) > 0 {
+			uuid = existingAttachment.UUID
+		}
+
+		id, uuid, gen, err := FileUpsert(bufio.NewReader(bytes.NewReader(pdfb)), instance, fileName, "application/pdf", createdBy, uuid, objectID, bucket, "invoice", hasuraEndpoint, adminSecret, "", instance, instance, "invoice_attachment_pkey")
+		if err != nil {
+			log.Println("upsert error", err)
+			return err
+		}
+		log.Println("file upserted: ", id, uuid, gen)
+
+	} else {
+		queryInvoiceAttachment := `query po_header_attachment($po_header_id: Int!) {
+			po_header_attachment(where: {po_header_id: {_eq: $po_header_id}, is_purchase_order: {_eq: true}, is_deleted: {_eq: false}}) {
+				uuid
+				name
+				generation
+			}
+		}
+		`
+		queryVar := map[string]interface{}{"po_header_id": objectID}
+		smartResponseData, err := SmartQuery(queryInvoiceAttachment, queryVar, hasuraEndpoint, "", token)
+		if err != nil {
+			log.Println("query error", err)
+			return err
+		}
+
+		existingAttachment := Attachment{}
+		for _, attachment := range smartResponseData.Data.InvoiceAttachment {
+			existingAttachment = attachment
+		}
+
+		if len(existingAttachment.UUID) > 0 {
+			uuid = existingAttachment.UUID
+		}
+
+		id, uuid, gen, err := FileUpsert(bufio.NewReader(bytes.NewReader(pdfb)), instance, fileName, "application/pdf", createdBy, uuid, objectID, bucket, "po_header", hasuraEndpoint, adminSecret, "", instance, instance, "po_header_attachment_pkey")
+		if err != nil {
+			log.Println("upsert error", err)
+			return err
+		}
+		log.Println("file upserted: ", id, uuid, gen)
+	}
+	return nil
+}
 func createLogo(pdf *gopdf.Fpdf, bc []byte, mleft float64, mtop float64, imageName string) {
 	opt := gopdf.ImageOptions{
 		ImageType:             "image/png",
