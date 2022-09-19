@@ -156,7 +156,8 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 	poHeaderItems := [][]string{}
 	if isInvoice {
 		poHeaderItems = [][]string{
-			{"Order", invoice.InvoiceNumber},
+			{"Invoice Number", invoice.InvoiceNumber},
+			{"Purchase Order", invoice.PoNumber},
 			{"Date", invoice.UpdatedAt.Format("January 2, 2006")},
 		}
 	} else {
