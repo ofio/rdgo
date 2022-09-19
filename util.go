@@ -370,7 +370,7 @@ func FileUpsert(file *bufio.Reader, instance int, fileName string, mime string, 
 		if !objExists {
 			ustr = UUID
 		} else {
-			fmt.Println("found " + UUID)
+			fmt.Println("found " + name)
 		}
 
 	} else {
