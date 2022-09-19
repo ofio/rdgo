@@ -496,7 +496,7 @@ func savePDFAttachment(pdfb []byte, objectID int, createdBy string, fileName str
 		}
 		`
 		queryVar := map[string]interface{}{"invoice_id": objectID}
-		smartResponseData, err := SmartQuery(queryInvoiceAttachment, queryVar, hasuraEndpoint, "", token)
+		smartResponseData, err := SmartQuery(queryInvoiceAttachment, queryVar, hasuraEndpoint, adminSecret, "")
 		if err != nil {
 			log.Println("query error", err)
 			return err
@@ -528,7 +528,7 @@ func savePDFAttachment(pdfb []byte, objectID int, createdBy string, fileName str
 		}
 		`
 		queryVar := map[string]interface{}{"po_header_id": objectID}
-		smartResponseData, err := SmartQuery(queryInvoiceAttachment, queryVar, hasuraEndpoint, "", token)
+		smartResponseData, err := SmartQuery(queryInvoiceAttachment, queryVar, hasuraEndpoint, adminSecret, "")
 		if err != nil {
 			log.Println("query error", err)
 			return err
