@@ -355,6 +355,7 @@ type Data struct {
 	DocumentGeneratorCondition []DocumentGeneratorCondition `json:"document_generator_condition"`
 	PoHeader                   []PoHeader                   `json:"po_header"`
 	Invoice                    []Invoice                    `json:"invoice"`
+	InvoiceAttachment          []Attachment                 `json:"invoice_attachment"`
 }
 
 type PoHeader struct {
@@ -379,6 +380,7 @@ type PoHeader struct {
 	PoLines               []PoLines        `json:"po_lines"`
 	Contract              Contract         `json:"contract"`
 	Department            Department       `json:"department"`
+	ID                    int              `json:"id"`
 }
 
 type BusinessBillTo struct {
