@@ -338,9 +338,9 @@ func queryPurchaseOrder(instance int, poNumber string, revision int, token strin
 	return purchaseOrder, nil
 }
 
-func queryInvoice(instance int, invoiceID int, revision int, token string, xHasuraAdminSecret string, HasuraEndpoint string) (Invoice, error) {
-	queryPO := `query invoice($instance_id: Int!, $id: Int!) {
-		invoice(where: {_and: {}, instance_id: {_eq: $instance_id}, id: {_eq: $id}}) {
+func queryInvoice(invoiceID int, revision int, token string, xHasuraAdminSecret string, HasuraEndpoint string) (Invoice, error) {
+	queryPO := `query invoice($id: Int!) {
+		invoice(where: {id: {_eq: $id}}) {
 			currency_code
 			business_id
 			po_number
@@ -392,7 +392,7 @@ func queryInvoice(instance int, invoiceID int, revision int, token string, xHasu
 	`
 
 	invoice := Invoice{}
-	queryVar := map[string]interface{}{"instance_id": instance, "id": invoiceID}
+	queryVar := map[string]interface{}{"id": invoiceID}
 	smartResponseData := Responsedata{}
 	err := NewError()
 	if len(xHasuraAdminSecret) > 0 {
@@ -424,7 +424,7 @@ func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, poNumber string,
 	brandingLogoUUID := ""
 	err := NewError()
 	if isInvoice {
-		invoice, err = queryInvoice(instance, invoiceID, revision, token, adminSecret, hasuraEndpoint)
+		invoice, err = queryInvoice(invoiceID, revision, token, adminSecret, hasuraEndpoint)
 		if err != nil {
 			fmt.Println(err)
 			return nil, "", err
