@@ -441,7 +441,7 @@ func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, poNumber string,
 		for _, settings := range invoice.Instance.InstanceSettings {
 			brandingLogoUUID = settings.BrandingLogoUUID
 		}
-		fileName = "Invoice " + invoice.InvoiceNumber + " " + invoice.BusinessName + ".pdf"
+		fileName = "Invoice " + invoice.InvoiceNumber + " " + invoice.Business.Name + ".pdf"
 		objectID = invoice.ID
 		createdBy = invoice.CreatedBy
 	} else {

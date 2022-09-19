@@ -325,11 +325,18 @@ func UpsertAttachmentGen(tableName string, attachmentName string, attachmentUuid
 		log.Println("hasura error: ", rd.Errors)
 		return -1, "", &MyError{rd.Errors[0].Message}
 	} else {
-		fmt.Println(rd.Data.Attachment)
-		if len(rd.Data.ContractAttachment.Returning) > 0 {
-			return rd.Data.ContractAttachment.Returning[0].Id, rd.Data.ContractAttachment.Returning[0].UUID, nil
-		} else if len(rd.Data.PoHeaderAttachment.Returning) > 0 {
-			return rd.Data.PoHeaderAttachment.Returning[0].Id, rd.Data.PoHeaderAttachment.Returning[0].UUID, nil
+		if len(rd.Data.InsertContractAttachment.Returning) > 0 {
+			return rd.Data.InsertContractAttachment.Returning[0].Id, rd.Data.InsertContractAttachment.Returning[0].UUID, nil
+		} else if len(rd.Data.InsertPoHeaderAttachment.Returning) > 0 {
+			return rd.Data.InsertPoHeaderAttachment.Returning[0].Id, rd.Data.InsertPoHeaderAttachment.Returning[0].UUID, nil
+		} else if len(rd.Data.InsertInvoiceAttachment.Returning) > 0 {
+			return rd.Data.InsertInvoiceAttachment.Returning[0].Id, rd.Data.InsertInvoiceAttachment.Returning[0].UUID, nil
+		} else if len(rd.Data.ContractAttachment) > 0 {
+			return rd.Data.ContractAttachment[0].ID, rd.Data.ContractAttachment[0].UUID, nil
+		} else if len(rd.Data.PoHeaderAttachment) > 0 {
+			return rd.Data.PoHeaderAttachment[0].ID, rd.Data.PoHeaderAttachment[0].UUID, nil
+		} else if len(rd.Data.InvoiceAttachment) > 0 {
+			return rd.Data.InvoiceAttachment[0].ID, rd.Data.InvoiceAttachment[0].UUID, nil
 		}
 	}
 	return -1, "", err

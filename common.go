@@ -316,24 +316,30 @@ type Contractupdateinput struct {
 }
 
 type Data struct {
-	Attachment struct {
+	InsertAttachment struct {
 		Returning []struct {
 			Id   int    `json:"id"`
 			Uuid string `json:"uuid"`
 		} `json:"returning"`
 	} `json:"insert_attachment"`
-	ContractAttachment struct {
+	InsertContractAttachment struct {
 		Returning []struct {
 			Id   int    `json:"id"`
 			UUID string `json:"uuid"`
 		} `json:"returning"`
 	} `json:"insert_contract_attachment"`
-	PoHeaderAttachment struct {
+	InsertPoHeaderAttachment struct {
 		Returning []struct {
 			Id   int    `json:"id"`
 			UUID string `json:"uuid"`
 		} `json:"returning"`
 	} `json:"insert_po_header_attachment"`
+	InsertInvoiceAttachment struct {
+		Returning []struct {
+			Id   int    `json:"id"`
+			UUID string `json:"uuid"`
+		} `json:"returning"`
+	} `json:"insert_invoice_attachment"`
 	Integration []struct {
 		ModuleName string `json:"module_name"`
 		Type       string `json:"type"`
@@ -356,6 +362,8 @@ type Data struct {
 	PoHeader                   []PoHeader                   `json:"po_header"`
 	Invoice                    []Invoice                    `json:"invoice"`
 	InvoiceAttachment          []Attachment                 `json:"invoice_attachment"`
+	ContractAttachment         []Attachment                 `json:"contract_attachment"`
+	PoHeaderAttachment         []Attachment                 `json:"po_header_attachment"`
 }
 
 type PoHeader struct {
@@ -493,6 +501,7 @@ type Responsedata struct {
 	Errors []Hasuraerror `json:"errors"`
 }
 type Attachment struct {
+	ID         int    `json:"id"`
 	UUID       string `json:"uuid"`
 	ReadSecret string `json:"read_secret"`
 	Generation int64  `json:"generation"`
