@@ -15,6 +15,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 
@@ -241,6 +242,17 @@ func GcsUpload(ctx context.Context, client *storage.Client, r bufio.Reader, buck
 	*/
 
 	return nil
+}
+
+func MustGetEnv(envKey, defaultValue string) string {
+	val := os.Getenv(envKey)
+	if val == "" {
+		val = defaultValue
+	}
+	if val == "" {
+		log.Fatalf("%q should be set", envKey)
+	}
+	return val
 }
 
 func UpsertAttachmentGen(tableName string, attachmentName string, attachmentUuid string, attachmentGen int64, attachmentMime string, attachmentInstance int, attachmentUser string, objectId int, endpoint string, adminSecret string, bearer string, createdByInstanceID int, updatedByInstanceID int, constraint string) (int, string, error) {
