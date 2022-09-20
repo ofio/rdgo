@@ -524,7 +524,7 @@ func savePDFAttachment(pdfb []byte, objectID int, createdBy string, fileName str
 			uuid = existingAttachment.UUID
 		}
 
-		id, uuid, gen, err := FileUpsert(bufio.NewReader(bytes.NewReader(pdfb)), instance, fileName, "application/pdf", createdBy, uuid, objectID, bucket, "invoice", hasuraEndpoint, adminSecret, "", instance, instance, "invoice_attachment_uuid_key")
+		id, uuid, gen, err = FileUpsert(bufio.NewReader(bytes.NewReader(pdfb)), instance, fileName, "application/pdf", createdBy, uuid, objectID, bucket, "invoice", hasuraEndpoint, adminSecret, "", instance, instance, "invoice_attachment_uuid_key")
 		if err != nil {
 			log.Println("upsert error", err)
 			return -1, "", -1, err
@@ -556,7 +556,7 @@ func savePDFAttachment(pdfb []byte, objectID int, createdBy string, fileName str
 			uuid = existingAttachment.UUID
 		}
 
-		id, uuid, gen, err := FileUpsert(bufio.NewReader(bytes.NewReader(pdfb)), instance, fileName, "application/pdf", createdBy, uuid, objectID, bucket, "po_header", hasuraEndpoint, adminSecret, "", instance, instance, "po_header_attachment_uuid_key")
+		id, uuid, gen, err = FileUpsert(bufio.NewReader(bytes.NewReader(pdfb)), instance, fileName, "application/pdf", createdBy, uuid, objectID, bucket, "po_header", hasuraEndpoint, adminSecret, "", instance, instance, "po_header_attachment_uuid_key")
 		if err != nil {
 			log.Println("upsert error", err)
 			return -1, "", -1, err
