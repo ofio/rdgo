@@ -364,6 +364,12 @@ type Data struct {
 			Uuid string `json:"uuid"`
 		} `json:"returning"`
 	} `json:"insert_attachment"`
+	InsertApprovalRequest struct {
+		Returning []struct {
+			Id   int    `json:"id"`
+			Uuid string `json:"uuid"`
+		} `json:"returning"`
+	} `json:"insert_approval_request"`
 	InsertContractAttachment struct {
 		Returning []struct {
 			Id   int    `json:"id"`
