@@ -256,6 +256,7 @@ type InstanceSetting struct {
 type ApprovalRequest struct {
 	UUID       string `json:"uuid"`
 	ObjectUUID string `json:"object_uuid"`
+	ObjectType string `json:"object_type"`
 	Id         int    `json:"id"`
 	Instance   struct {
 		ID               int               `json:"id"`
@@ -272,6 +273,32 @@ type ApprovalRequest struct {
 	CreatedBy                  string                      `json:"created_by"`
 	InstanceID                 int                         `json:"instance_id"`
 	AttachmentRank             []string                    `json:"attachment_rank"`
+	AdminAutomation            struct {
+		AuditTrailUUID string `json:"audit_trail"`
+	} `json:"admin_automation"`
+	CoverPage bool `json:"cover_page"`
+}
+
+type InsertApprovalRequest struct {
+	UUID       string `json:"uuid"`
+	ObjectUUID string `json:"object_uuid"`
+	ObjectType string `json:"object_type"`
+	Id         int    `json:"id"`
+	Instance   struct {
+		ID               int               `json:"id"`
+		InstanceSettings []InstanceSetting `json:"instance_settings"`
+		Business         Business          `json:"business"`
+	} `json:"instance"`
+	Message                    string                          `json:"message"`
+	Status                     string                          `json:"status"`
+	ExternalID                 string                          `json:"external_id"`
+	ServiceName                string                          `json:"service_name"`
+	ApprovalRequestAttachments InsertApprovalRequestAttachment `json:"approval_request_attachments"`
+	Creator                    ApprovalRequestCreator          `json:"creator"`
+	Contract                   Contract                        `json:"contract"`
+	CreatedBy                  string                          `json:"created_by"`
+	InstanceID                 int                             `json:"instance_id"`
+	AttachmentRank             []string                        `json:"attachment_rank"`
 	AdminAutomation            struct {
 		AuditTrailUUID string `json:"audit_trail"`
 	} `json:"admin_automation"`
@@ -301,9 +328,17 @@ type ApprovalRequestApprover struct {
 	Message   string    `json:"message"`
 }
 
+type InsertApprovalRequestAttachment struct {
+	Data []ApprovalRequestAttachment `json:"data"`
+}
+
 type ApprovalRequestAttachment struct {
-	Attachment          Attachment                `json:"contract_attachment"`
-	AttachmentApprovers []ApprovalRequestApprover `json:"approval_request_attachment_approvers"`
+	Attachment               Attachment                `json:"contract_attachment"`
+	AttachmentApprovers      []ApprovalRequestApprover `json:"approval_request_attachment_approvers"`
+	ContractAttachmentID     int                       `json:"contract_attachment_id,omitempty"`
+	PoHeaderAttachmentID     int                       `json:"po_header_attachment_id,omitempty"`
+	RegistrationAttachmentID int                       `json:"registration_attachment_id,omitempty"`
+	PoHeaderAttachmentID     int                       `json:"po_header_attachment_id,omitempty"`
 }
 
 type Owner struct {
