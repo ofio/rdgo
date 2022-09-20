@@ -87,6 +87,7 @@ type Invoice struct {
 	Instance            Instance       `json:"instance"`
 	InvoiceLines        []InvoiceLines `json:"invoice_lines"`
 	Business            Business       `json:"business"`
+	ApprovalWorkflowID  int            `json:"approval_workflow_id"`
 }
 type ImportData struct {
 }
