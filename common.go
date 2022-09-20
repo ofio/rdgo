@@ -283,6 +283,7 @@ type InsertApprovalRequest struct {
 	UUID       string `json:"uuid"`
 	ObjectUUID string `json:"object_uuid"`
 	ObjectType string `json:"object_type"`
+	WorkflowID int    `json:"workflow_id"`
 	Id         int    `json:"id"`
 	Instance   struct {
 		ID               int               `json:"id"`
@@ -297,6 +298,7 @@ type InsertApprovalRequest struct {
 	Creator                    ApprovalRequestCreator          `json:"creator"`
 	Contract                   Contract                        `json:"contract"`
 	CreatedBy                  string                          `json:"created_by"`
+	UpdatedBy                  string                          `json:"updated_by"`
 	InstanceID                 int                             `json:"instance_id"`
 	AttachmentRank             []string                        `json:"attachment_rank"`
 	AdminAutomation            struct {
@@ -338,7 +340,6 @@ type ApprovalRequestAttachment struct {
 	ContractAttachmentID     int                       `json:"contract_attachment_id,omitempty"`
 	PoHeaderAttachmentID     int                       `json:"po_header_attachment_id,omitempty"`
 	RegistrationAttachmentID int                       `json:"registration_attachment_id,omitempty"`
-	PoHeaderAttachmentID     int                       `json:"po_header_attachment_id,omitempty"`
 }
 
 type Owner struct {
