@@ -339,7 +339,7 @@ func UpsertAttachmentGen(tableName string, attachmentName string, attachmentUuid
 			return rd.Data.InvoiceAttachment[0].ID, rd.Data.InvoiceAttachment[0].UUID, nil
 		}
 	}
-	return -1, "", err
+	return -1, "", &MyError{"failed to upsert attachment"}
 }
 
 func GetGeneration(client *storage.Client, ctx context.Context, bucket string, name string) (int64, error) {
@@ -409,7 +409,6 @@ func FileUpsert(file *bufio.Reader, instance int, fileName string, mime string, 
 	id, uuid, err := UpsertAttachmentGen(tableName, fileName, ustr, gen, mime, instance, user, objectID, endpoint, adminSecret, bearer, createdByInstanceID, updatedByInstanceID, constraint)
 	if err != nil {
 		fmt.Println("could not upsert attachment gen")
-
 		return 0, "", 0, err
 	}
 

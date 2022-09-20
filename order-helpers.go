@@ -423,9 +423,17 @@ func queryInvoice(invoiceID int, revision int, token string, xHasuraAdminSecret 
 	return invoice, nil
 }
 
-func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, poNumber string, invoiceID int, revision int, token string, adminSecret string, hasuraEndpoint string, isInvoice bool, bucket string, publicBucket string, saveAttachment bool) ([]byte, string, error) {
+type SaveAttachmentResponse struct {
+	ID         int
+	UUID       string
+	Generation int64
+}
+
+func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, poNumber string, invoiceID int, revision int, token string, adminSecret string, hasuraEndpoint string, isInvoice bool, bucket string, publicBucket string, saveAttachment bool) ([]byte, string, SaveAttachmentResponse, error) {
 	poHeader := PoHeader{}
 	invoice := Invoice{}
+
+	response := SaveAttachmentResponse{}
 
 	fileName := ""
 	brandingLogoUUID := ""
@@ -436,7 +444,7 @@ func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, poNumber string,
 		invoice, err = queryInvoice(invoiceID, revision, token, adminSecret, hasuraEndpoint)
 		if err != nil {
 			fmt.Println(err)
-			return nil, "", err
+			return nil, "", response, err
 		}
 		for _, settings := range invoice.Instance.InstanceSettings {
 			brandingLogoUUID = settings.BrandingLogoUUID
@@ -448,7 +456,7 @@ func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, poNumber string,
 		poHeader, err = queryPurchaseOrder(instance, poNumber, revision, token, adminSecret, hasuraEndpoint)
 		if err != nil {
 			fmt.Println(err)
-			return nil, "", err
+			return nil, "", response, err
 		}
 		for _, settings := range poHeader.Instance.InstanceSettings {
 			brandingLogoUUID = settings.BrandingLogoUUID
@@ -470,22 +478,27 @@ func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, poNumber string,
 	pdfb, err = CreatePurchaseOrderInvoice(pdf, poHeader, invoice, isInvoice, &logob)
 	if err != nil {
 		fmt.Println(err)
-		return nil, "", err
+		return nil, "", response, err
 	}
 
 	if saveAttachment {
-		err := savePDFAttachment(pdfb, objectID, createdBy, fileName, instance, isInvoice, hasuraEndpoint, adminSecret, token, bucket)
+		attachmentId, uuid, gen, err := savePDFAttachment(pdfb, objectID, createdBy, fileName, instance, isInvoice, hasuraEndpoint, adminSecret, token, bucket)
 		if err != nil {
 			fmt.Println(err)
-			return nil, "", err
+			return nil, "", response, err
 		}
+		response.ID = attachmentId
+		response.UUID = uuid
+		response.Generation = gen
 	}
 
-	return pdfb, fileName, nil
+	return pdfb, fileName, response, nil
 }
 
-func savePDFAttachment(pdfb []byte, objectID int, createdBy string, fileName string, instance int, isInvoice bool, hasuraEndpoint string, adminSecret string, token string, bucket string) error {
+func savePDFAttachment(pdfb []byte, objectID int, createdBy string, fileName string, instance int, isInvoice bool, hasuraEndpoint string, adminSecret string, token string, bucket string) (int, string, int64, error) {
 	uuid := uuid.NewV4().String()
+	id := -1
+	gen := int64(-1)
 	if isInvoice {
 		queryInvoiceAttachment := `query invoice_attachment($invoice_id: Int!) {
 			invoice_attachment(where: { invoice_id: { _eq: $invoice_id }, is_deleted: { _eq: false } }) {
@@ -499,7 +512,7 @@ func savePDFAttachment(pdfb []byte, objectID int, createdBy string, fileName str
 		smartResponseData, err := SmartQuery(queryInvoiceAttachment, queryVar, hasuraEndpoint, adminSecret, "")
 		if err != nil {
 			log.Println("query error", err)
-			return err
+			return -1, "", -1, err
 		}
 
 		existingAttachment := Attachment{}
@@ -514,7 +527,7 @@ func savePDFAttachment(pdfb []byte, objectID int, createdBy string, fileName str
 		id, uuid, gen, err := FileUpsert(bufio.NewReader(bytes.NewReader(pdfb)), instance, fileName, "application/pdf", createdBy, uuid, objectID, bucket, "invoice", hasuraEndpoint, adminSecret, "", instance, instance, "invoice_attachment_uuid_key")
 		if err != nil {
 			log.Println("upsert error", err)
-			return err
+			return -1, "", -1, err
 		}
 		log.Println("file upserted: ", id, uuid, gen)
 
@@ -531,7 +544,7 @@ func savePDFAttachment(pdfb []byte, objectID int, createdBy string, fileName str
 		smartResponseData, err := SmartQuery(queryInvoiceAttachment, queryVar, hasuraEndpoint, adminSecret, "")
 		if err != nil {
 			log.Println("query error", err)
-			return err
+			return -1, "", -1, err
 		}
 
 		existingAttachment := Attachment{}
@@ -546,11 +559,11 @@ func savePDFAttachment(pdfb []byte, objectID int, createdBy string, fileName str
 		id, uuid, gen, err := FileUpsert(bufio.NewReader(bytes.NewReader(pdfb)), instance, fileName, "application/pdf", createdBy, uuid, objectID, bucket, "po_header", hasuraEndpoint, adminSecret, "", instance, instance, "po_header_attachment_uuid_key")
 		if err != nil {
 			log.Println("upsert error", err)
-			return err
+			return -1, "", -1, err
 		}
 		log.Println("file upserted: ", id, uuid, gen)
 	}
-	return nil
+	return id, uuid, gen, nil
 }
 func createLogo(pdf *gopdf.Fpdf, bc []byte, mleft float64, mtop float64, imageName string) {
 	opt := gopdf.ImageOptions{
