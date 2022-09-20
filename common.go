@@ -342,6 +342,7 @@ type ApprovalRequestAttachment struct {
 	ContractAttachmentID     int                       `json:"contract_attachment_id,omitempty"`
 	PoHeaderAttachmentID     int                       `json:"po_header_attachment_id,omitempty"`
 	RegistrationAttachmentID int                       `json:"registration_attachment_id,omitempty"`
+	InvoiceAttachmentID      int                       `json:"invoice_attachment_id,omitempty"`
 }
 
 type Owner struct {
