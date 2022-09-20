@@ -535,7 +535,7 @@ func savePDFAttachment(pdfb []byte, objectID int, createdBy string, fileName str
 		}
 
 		existingAttachment := Attachment{}
-		for _, attachment := range smartResponseData.Data.InvoiceAttachment {
+		for _, attachment := range smartResponseData.Data.PoHeaderAttachment {
 			existingAttachment = attachment
 		}
 
