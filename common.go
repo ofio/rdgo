@@ -257,6 +257,7 @@ type ApprovalRequest struct {
 	UUID       string `json:"uuid"`
 	ObjectUUID string `json:"object_uuid"`
 	ObjectType string `json:"object_type"`
+	WorkflowID int    `json:"workflow_id"`
 	Id         int    `json:"id"`
 	Instance   struct {
 		ID               int               `json:"id"`
@@ -271,6 +272,7 @@ type ApprovalRequest struct {
 	Creator                    ApprovalRequestCreator      `json:"creator"`
 	Contract                   Contract                    `json:"contract"`
 	CreatedBy                  string                      `json:"created_by"`
+	UpdatedBy                  string                      `json:"updated_by"`
 	InstanceID                 int                         `json:"instance_id"`
 	AttachmentRank             []string                    `json:"attachment_rank"`
 	AdminAutomation            struct {
