@@ -331,6 +331,7 @@ type ApprovalRequestAttachment struct {
 	InvoiceAttachmentID      *int                      `json:"invoice_attachment_id,omitempty"`
 	AttachmentVersion        int                       `json:"attachment_version"`
 	AttachmentGeneration     int64                     `json:"attachment_generation"`
+	InstanceID               *int                      `json:"instance_id,omitempty"`
 }
 
 type Owner struct {
@@ -542,6 +543,7 @@ type Attachment struct {
 	Name       string `json:"name"`
 	Mime       string `json:"mime_type"`
 	Version    int    `json:"version"`
+	InstanceID int    `json:"instance_id"`
 }
 
 type EmailTemplate struct {
