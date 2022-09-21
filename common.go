@@ -555,6 +555,7 @@ type Attachment struct {
 	Generation int64  `json:"generation"`
 	Name       string `json:"name"`
 	Mime       string `json:"mime_type"`
+	Version    int    `json:"version"`
 }
 
 type EmailTemplate struct {
