@@ -278,6 +278,7 @@ type ApprovalRequest struct {
 	CoverPage                  bool                        `json:"cover_page"`
 }
 
+//note
 type InsertApprovalRequest struct {
 	ObjectUUID                 string                          `json:"object_uuid"`
 	ObjectType                 string                          `json:"object_type"`
