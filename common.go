@@ -279,21 +279,14 @@ type ApprovalRequest struct {
 }
 
 type InsertApprovalRequest struct {
-	UUID       string `json:"uuid"`
-	ObjectUUID string `json:"object_uuid"`
-	ObjectType string `json:"object_type"`
-	WorkflowID int    `json:"workflow_id"`
-	Instance   struct {
-		ID               int               `json:"id"`
-		InstanceSettings []InstanceSetting `json:"instance_settings"`
-		Business         Business          `json:"business"`
-	} `json:"instance"`
+	ObjectUUID                 string                          `json:"object_uuid"`
+	ObjectType                 string                          `json:"object_type"`
+	WorkflowID                 int                             `json:"workflow_id"`
 	Message                    string                          `json:"message"`
 	Status                     string                          `json:"status"`
 	ExternalID                 string                          `json:"external_id"`
 	ServiceName                string                          `json:"service_name"`
 	ApprovalRequestAttachments InsertApprovalRequestAttachment `json:"approval_request_attachments"`
-	Contract                   Contract                        `json:"contract"`
 	CreatedBy                  string                          `json:"created_by"`
 	UpdatedBy                  string                          `json:"updated_by"`
 	InstanceID                 int                             `json:"instance_id"`
@@ -329,7 +322,7 @@ type InsertApprovalRequestAttachment struct {
 }
 
 type ApprovalRequestAttachment struct {
-	ContractAttachment       Attachment                `json:"contract_attachment,omitempty"`
+	ContractAttachment       *Attachment               `json:"contract_attachment,omitempty"`
 	AttachmentApprovers      []ApprovalRequestApprover `json:"approval_request_attachment_approvers,omitempty"`
 	ContractAttachmentID     *int                      `json:"contract_attachment_id,omitempty"`
 	PoHeaderAttachmentID     *int                      `json:"po_header_attachment_id,omitempty"`
