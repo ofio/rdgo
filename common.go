@@ -332,6 +332,8 @@ type ApprovalRequestAttachment struct {
 	AttachmentVersion        int                       `json:"attachment_version"`
 	AttachmentGeneration     int64                     `json:"attachment_generation"`
 	InstanceID               *int                      `json:"instance_id,omitempty"`
+	CreatedBy                string                    `json:"created_by,omitempty"`
+	UpdatedBy                string                    `json:"created_by,omitempty"`
 }
 
 type Owner struct {
