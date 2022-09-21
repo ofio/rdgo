@@ -427,6 +427,7 @@ type PoHeader struct {
 	Department            Department       `json:"department"`
 	ID                    int              `json:"id"`
 	CreatedBy             string           `json:"created_by"`
+	PoHeaderAttachments   []Attachment     `json:"po_header_attachments"`
 }
 
 type BusinessBillTo struct {
