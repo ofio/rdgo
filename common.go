@@ -15,11 +15,6 @@ type ContractQuery struct {
 	ExternalID string `json:"external_id"`
 }
 
-type PrimaryContact struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-}
-
 type Contract struct {
 	BoardItemContracts      *[]BoardItemContract   `json:"board_item_contracts"`
 	Note                    string                 `json:"note"`
@@ -34,7 +29,7 @@ type Contract struct {
 	EffectiveDate           string                 `json:"effective_date"`
 	EndDate                 string                 `json:"end_date"`
 	Owner                   Owner                  `json:"owner"`
-	PrimaryContact          PrimaryContact         `json:"primary_contact"`
+	PrimaryContact          User                   `json:"primary_contact"`
 	ManagingDepartment      Department             `json:"managing_department"`
 	ContractDiscountTerms   []ContractDiscountTerm `json:"contract_discount_terms"`
 	TotalValue              float64                `json:"total_value"`
@@ -147,10 +142,7 @@ type ApprovalRequestContract struct {
 		ID   string `json:"id"`
 		Name string `json:"name"`
 	} `json:"owner"`
-	PrimaryContact struct {
-		ID   string `json:"id"`
-		Name string `json:"name"`
-	} `json:"primary_contact"`
+	PrimaryContact        User                   `json:"primary_contact"`
 	ManagingDepartment    Department             `json:"managing_department"`
 	Note                  string                 `json:"note"`
 	ContractDiscountTerms []ContractDiscountTerm `json:"contract_discount_terms"`
@@ -417,7 +409,7 @@ type PoHeader struct {
 	Rev                   int              `json:"rev"`
 	BuyerJsonb            BuyerJsonb       `json:"buyer_jsonb"`
 	RequesterJsonb        RequesterJsonb   `json:"requester_jsonb"`
-	SupplierContact       SupplierContact  `json:"supplier_contact"`
+	SupplierContact       User             `json:"supplier_contact"`
 	UpdatedAt             time.Time        `json:"updated_at"`
 	BusinessBillTo        BusinessBillTo   `json:"businessBillTo"`
 	BusinessShipTo        BusinessShipTo   `json:"businessShipTo"`
@@ -428,6 +420,11 @@ type PoHeader struct {
 	ID                    int              `json:"id"`
 	CreatedBy             string           `json:"created_by"`
 	PoHeaderAttachments   []Attachment     `json:"po_header_attachments"`
+	SupplierContactID     string           `json:"supplier_contact_id"`
+	SupplierBusinessID    int              `json:"supplier_business_id"`
+	InstanceID            int              `json:"instance_id"`
+	UUID                  string           `json:"uuid"`
+	Buyer                 User             `json:"buyer"`
 }
 
 type BusinessBillTo struct {
@@ -480,11 +477,6 @@ type Commodity struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
-type SupplierContact struct {
-	Name  string `json:"name"`
-	Email string `json:"email"`
-	Phone string `json:"phone"`
-}
 
 type BuyerJsonb struct {
 	ID         string `json:"id"`
@@ -521,7 +513,11 @@ type Role struct {
 	Name string `json:"name"`
 }
 type User struct {
-	Role Role `json:"role"`
+	Role  Role   `json:"role"`
+	ID    string `json:"id"`
+	Name  string `json:"name,omitempty"`
+	Email string `json:"email,omitempty"`
+	Phone string `json:"phone,omitempty"`
 }
 
 type Hasuraerror struct {
