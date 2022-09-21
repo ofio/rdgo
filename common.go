@@ -275,10 +275,7 @@ type ApprovalRequest struct {
 	UpdatedBy                  string                      `json:"updated_by"`
 	InstanceID                 int                         `json:"instance_id"`
 	AttachmentRank             []string                    `json:"attachment_rank"`
-	AdminAutomation            struct {
-		AuditTrailUUID string `json:"audit_trail"`
-	} `json:"admin_automation"`
-	CoverPage bool `json:"cover_page"`
+	CoverPage                  bool                        `json:"cover_page"`
 }
 
 type InsertApprovalRequest struct {
