@@ -329,12 +329,12 @@ type InsertApprovalRequestAttachment struct {
 }
 
 type ApprovalRequestAttachment struct {
-	Attachment               Attachment                `json:"contract_attachment"`
-	AttachmentApprovers      []ApprovalRequestApprover `json:"approval_request_attachment_approvers"`
-	ContractAttachmentID     int                       `json:"contract_attachment_id,omitempty"`
-	PoHeaderAttachmentID     int                       `json:"po_header_attachment_id,omitempty"`
-	RegistrationAttachmentID int                       `json:"registration_attachment_id,omitempty"`
-	InvoiceAttachmentID      int                       `json:"invoice_attachment_id,omitempty"`
+	ContractAttachment       Attachment                `json:"contract_attachment,omitempty"`
+	AttachmentApprovers      []ApprovalRequestApprover `json:"approval_request_attachment_approvers,omitempty"`
+	ContractAttachmentID     *int                      `json:"contract_attachment_id,omitempty"`
+	PoHeaderAttachmentID     *int                      `json:"po_header_attachment_id,omitempty"`
+	RegistrationAttachmentID *int                      `json:"registration_attachment_id,omitempty"`
+	InvoiceAttachmentID      *int                      `json:"invoice_attachment_id,omitempty"`
 	AttachmentVersion        int                       `json:"attachment_version"`
 	AttachmentGeneration     int64                     `json:"attachment_generation"`
 }
