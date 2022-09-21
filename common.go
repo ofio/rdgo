@@ -283,7 +283,6 @@ type InsertApprovalRequest struct {
 	ObjectUUID string `json:"object_uuid"`
 	ObjectType string `json:"object_type"`
 	WorkflowID int    `json:"workflow_id"`
-	Id         int    `json:"id"`
 	Instance   struct {
 		ID               int               `json:"id"`
 		InstanceSettings []InstanceSetting `json:"instance_settings"`
@@ -294,16 +293,12 @@ type InsertApprovalRequest struct {
 	ExternalID                 string                          `json:"external_id"`
 	ServiceName                string                          `json:"service_name"`
 	ApprovalRequestAttachments InsertApprovalRequestAttachment `json:"approval_request_attachments"`
-	Creator                    ApprovalRequestCreator          `json:"creator"`
 	Contract                   Contract                        `json:"contract"`
 	CreatedBy                  string                          `json:"created_by"`
 	UpdatedBy                  string                          `json:"updated_by"`
 	InstanceID                 int                             `json:"instance_id"`
 	AttachmentRank             []string                        `json:"attachment_rank"`
-	AdminAutomation            struct {
-		AuditTrailUUID string `json:"audit_trail"`
-	} `json:"admin_automation"`
-	CoverPage bool `json:"cover_page"`
+	CoverPage                  bool                            `json:"cover_page"`
 }
 type Business struct {
 	ID            int    `json:"id"`
