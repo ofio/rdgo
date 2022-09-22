@@ -78,7 +78,7 @@ type Invoice struct {
 	UpdatedByUserJsonb  UserJsonb      `json:"updated_by_user_jsonb"`
 	UserEmail           string         `json:"user_email"`
 	UUID                string         `json:"uuid"`
-	ValidationStatus    string         `json:"validation_status"`
+	Status              string         `json:"status"`
 	Instance            Instance       `json:"instance"`
 	InvoiceLines        []InvoiceLines `json:"invoice_lines"`
 	Business            Business       `json:"business"`
