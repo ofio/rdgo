@@ -129,7 +129,7 @@ type JwtStruct struct {
 	Signature string
 }
 
-func parseJWT(idToken string) (*JwtStruct, error) {
+func ParseJWT(idToken string) (*JwtStruct, error) {
 	segments := strings.Split(idToken, ".")
 	if len(segments) != 3 {
 		return nil, fmt.Errorf("idtoken: invalid token, token must have three segments; found %d", len(segments))
