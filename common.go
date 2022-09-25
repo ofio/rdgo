@@ -294,6 +294,8 @@ type InsertInvoiceEmail struct {
 	InstanceID              int                          `json:"instance_id"`
 	CreatedAt               time.Time                    `json:"created_at"`
 	CreatedBy               string                       `json:"created_by"`
+	UpdatedAt               time.Time                    `json:"updated_at"`
+	UpdatedBy               string                       `json:"updated_by"`
 	MessageID               string                       `json:"message_id"`
 	Subject                 string                       `json:"subject"`
 	InvoiceEmailAttachments InsertInvoiceEmailAttachment `json:"invoice_email_attachments"`
