@@ -286,6 +286,23 @@ type InsertApprovalRequest struct {
 	AttachmentRank             []string                        `json:"attachment_rank"`
 	CoverPage                  bool                            `json:"cover_page"`
 }
+
+type InsertInvoiceEmail struct {
+	ID                      int                          `json:"id"`
+	From                    string                       `json:"from"`
+	To                      string                       `json:"to"`
+	InstanceID              int                          `json:"instance_id"`
+	CreatedAt               time.Time                    `json:"created_at"`
+	CreatedBy               string                       `json:"created_by"`
+	MessageID               string                       `json:"message_id"`
+	Subject                 string                       `json:"subject"`
+	InvoiceEmailAttachments InsertInvoiceEmailAttachment `json:"invoice_email_attachments"`
+}
+
+type InsertInvoiceEmailAttachment struct {
+	Data []Attachment `json:"data"`
+}
+
 type Business struct {
 	ID            int    `json:"id"`
 	Name          string `json:"name"`
@@ -544,7 +561,7 @@ type Attachment struct {
 	Version    int    `json:"version"`
 	InstanceID int    `json:"instance_id,omitempty"`
 	CreatedBy  string `json:"created_by,omitempty"`
-	UpdatedBy  string `json:"created_by,omitempty"`
+	UpdatedBy  string `json:"updated_by,omitempty"`
 }
 
 type EmailTemplate struct {
