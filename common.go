@@ -299,6 +299,7 @@ type InsertInvoiceEmail struct {
 	MessageID               string                        `json:"message_id"`
 	Subject                 string                        `json:"subject"`
 	InvoiceEmailAttachments *InsertInvoiceEmailAttachment `json:"invoice_email_attachments,omitempty"`
+	ImportStatus            string                        `json:"import_status,omitempty"`
 }
 
 type InsertInvoiceEmailAttachment struct {
