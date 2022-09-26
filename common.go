@@ -292,9 +292,9 @@ type InsertInvoiceEmail struct {
 	From                    string                        `json:"from"`
 	To                      string                        `json:"to"`
 	InstanceID              int                           `json:"instance_id"`
-	CreatedAt               time.Time                     `json:"created_at,omitempty"`
+	CreatedAt               *time.Time                    `json:"created_at,omitempty"`
 	CreatedBy               string                        `json:"created_by"`
-	UpdatedAt               time.Time                     `json:"updated_at,omitempty"`
+	UpdatedAt               *time.Time                    `json:"updated_at,omitempty"`
 	UpdatedBy               string                        `json:"updated_by"`
 	MessageID               string                        `json:"message_id"`
 	Subject                 string                        `json:"subject"`
