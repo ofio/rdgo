@@ -332,11 +332,11 @@ func UpsertAttachmentGen(tableName string, attachmentName string, attachmentUuid
 		} else if len(rd.Data.InsertInvoiceAttachment.Returning) > 0 {
 			return rd.Data.InsertInvoiceAttachment.Returning[0].Id, rd.Data.InsertInvoiceAttachment.Returning[0].UUID, nil
 		} else if len(rd.Data.ContractAttachment) > 0 {
-			return rd.Data.ContractAttachment[0].ID, rd.Data.ContractAttachment[0].UUID, nil
+			return *rd.Data.ContractAttachment[0].ID, rd.Data.ContractAttachment[0].UUID, nil
 		} else if len(rd.Data.PoHeaderAttachment) > 0 {
-			return rd.Data.PoHeaderAttachment[0].ID, rd.Data.PoHeaderAttachment[0].UUID, nil
+			return *rd.Data.PoHeaderAttachment[0].ID, rd.Data.PoHeaderAttachment[0].UUID, nil
 		} else if len(rd.Data.InvoiceAttachment) > 0 {
-			return rd.Data.InvoiceAttachment[0].ID, rd.Data.InvoiceAttachment[0].UUID, nil
+			return *rd.Data.InvoiceAttachment[0].ID, rd.Data.InvoiceAttachment[0].UUID, nil
 		}
 	}
 	return -1, "", &MyError{"failed to upsert attachment"}
