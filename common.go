@@ -288,7 +288,7 @@ type InsertApprovalRequest struct {
 }
 
 type InsertInvoiceEmail struct {
-	ID                      int                          `json:"id"`
+	ID                      *int                         `json:"id,omitempty"`
 	From                    string                       `json:"from"`
 	To                      string                       `json:"to"`
 	InstanceID              int                          `json:"instance_id"`
