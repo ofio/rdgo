@@ -288,21 +288,21 @@ type InsertApprovalRequest struct {
 }
 
 type InsertInvoiceEmail struct {
-	ID                      *int                         `json:"id,omitempty"`
-	From                    string                       `json:"from"`
-	To                      string                       `json:"to"`
-	InstanceID              int                          `json:"instance_id"`
-	CreatedAt               time.Time                    `json:"created_at"`
-	CreatedBy               string                       `json:"created_by"`
-	UpdatedAt               time.Time                    `json:"updated_at"`
-	UpdatedBy               string                       `json:"updated_by"`
-	MessageID               string                       `json:"message_id"`
-	Subject                 string                       `json:"subject"`
-	InvoiceEmailAttachments InsertInvoiceEmailAttachment `json:"invoice_email_attachments"`
+	ID                      *int                          `json:"id,omitempty"`
+	From                    string                        `json:"from"`
+	To                      string                        `json:"to"`
+	InstanceID              int                           `json:"instance_id"`
+	CreatedAt               time.Time                     `json:"created_at,omitempty"`
+	CreatedBy               string                        `json:"created_by"`
+	UpdatedAt               time.Time                     `json:"updated_at,omitempty"`
+	UpdatedBy               string                        `json:"updated_by"`
+	MessageID               string                        `json:"message_id"`
+	Subject                 string                        `json:"subject"`
+	InvoiceEmailAttachments *InsertInvoiceEmailAttachment `json:"invoice_email_attachments,omitempty"`
 }
 
 type InsertInvoiceEmailAttachment struct {
-	Data []Attachment `json:"data"`
+	Data []Attachment `json:"data,omitempty"`
 }
 
 type Business struct {
@@ -560,7 +560,7 @@ type Attachment struct {
 	Generation int64  `json:"generation"`
 	Name       string `json:"name"`
 	Mime       string `json:"mime_type"`
-	Version    int    `json:"version"`
+	Version    *int   `json:"version,omitempty"`
 	InstanceID int    `json:"instance_id,omitempty"`
 	CreatedBy  string `json:"created_by,omitempty"`
 	UpdatedBy  string `json:"updated_by,omitempty"`
