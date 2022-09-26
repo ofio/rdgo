@@ -554,7 +554,7 @@ type Responsedata struct {
 	Errors []Hasuraerror `json:"errors"`
 }
 type Attachment struct {
-	ID         int    `json:"id"`
+	ID         *int   `json:"id,omitempty"`
 	UUID       string `json:"uuid,omitempty"`
 	ReadSecret string `json:"read_secret,omitempty"`
 	Generation int64  `json:"generation"`
