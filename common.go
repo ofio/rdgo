@@ -389,6 +389,12 @@ type Data struct {
 			UUID string `json:"uuid"`
 		} `json:"returning"`
 	} `json:"insert_invoice_attachment"`
+	InsertInvoiceEmail struct {
+		Returning []struct {
+			Id   int    `json:"id"`
+			UUID string `json:"uuid"`
+		} `json:"returning"`
+	} `json:"insert_invoice_email"`
 	Integration []struct {
 		ModuleName string `json:"module_name"`
 		Type       string `json:"type"`
