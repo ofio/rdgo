@@ -287,22 +287,23 @@ type InsertApprovalRequest struct {
 	CoverPage                  bool                            `json:"cover_page"`
 }
 
-type InsertInvoiceEmail struct {
-	ID                      *int                          `json:"id,omitempty"`
-	From                    string                        `json:"from"`
-	To                      string                        `json:"to"`
-	InstanceID              int                           `json:"instance_id"`
-	CreatedAt               *time.Time                    `json:"created_at,omitempty"`
-	CreatedBy               string                        `json:"created_by"`
-	UpdatedAt               *time.Time                    `json:"updated_at,omitempty"`
-	UpdatedBy               string                        `json:"updated_by"`
-	MessageID               string                        `json:"message_id"`
-	Subject                 string                        `json:"subject"`
-	InvoiceEmailAttachments *InsertInvoiceEmailAttachment `json:"invoice_email_attachments,omitempty"`
-	ImportStatus            string                        `json:"import_status,omitempty"`
+type InsertInvoice struct {
+	ID                      *int                     `json:"id,omitempty"`
+	From                    string                   `json:"from"`
+	InstanceID              int                      `json:"instance_id"`
+	CreatedAt               *time.Time               `json:"created_at,omitempty"`
+	CreatedBy               string                   `json:"created_by"`
+	UpdatedAt               *time.Time               `json:"updated_at,omitempty"`
+	UpdatedBy               string                   `json:"updated_by"`
+	MessageID               string                   `json:"message_id"`
+	MessageAttachmentID     string                   `json:"message_attachment_id"`
+	Subject                 string                   `json:"subject,omitempty"`
+	InvoiceEmailAttachments *InsertInvoiceAttachment `json:"invoice_attachments,omitempty"`
+	ImportStatus            string                   `json:"import_status,omitempty"`
+	UserEmail               string                   `json:"user_email,omitempty"`
 }
 
-type InsertInvoiceEmailAttachment struct {
+type InsertInvoiceAttachment struct {
 	Data []Attachment `json:"data,omitempty"`
 }
 
@@ -389,12 +390,12 @@ type Data struct {
 			UUID string `json:"uuid"`
 		} `json:"returning"`
 	} `json:"insert_invoice_attachment"`
-	InsertInvoiceEmail struct {
+	InsertInvoice struct {
 		Returning []struct {
 			Id   int    `json:"id"`
 			UUID string `json:"uuid"`
 		} `json:"returning"`
-	} `json:"insert_invoice_email"`
+	} `json:"insert_invoice"`
 	Integration []struct {
 		ModuleName string `json:"module_name"`
 		Type       string `json:"type"`
