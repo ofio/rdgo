@@ -288,19 +288,19 @@ type InsertApprovalRequest struct {
 }
 
 type InsertInvoice struct {
-	ID                      *int                     `json:"id,omitempty"`
-	From                    string                   `json:"from"`
-	InstanceID              int                      `json:"instance_id"`
-	CreatedAt               *time.Time               `json:"created_at,omitempty"`
-	CreatedBy               string                   `json:"created_by"`
-	UpdatedAt               *time.Time               `json:"updated_at,omitempty"`
-	UpdatedBy               string                   `json:"updated_by"`
-	MessageID               string                   `json:"message_id"`
-	MessageAttachmentID     string                   `json:"message_attachment_id"`
-	Subject                 string                   `json:"subject,omitempty"`
-	InvoiceEmailAttachments *InsertInvoiceAttachment `json:"invoice_attachments,omitempty"`
-	ImportStatus            string                   `json:"import_status,omitempty"`
-	UserEmail               string                   `json:"user_email,omitempty"`
+	ID                  *int                     `json:"id,omitempty"`
+	From                string                   `json:"from"`
+	InstanceID          int                      `json:"instance_id"`
+	CreatedAt           *time.Time               `json:"created_at,omitempty"`
+	CreatedBy           string                   `json:"created_by"`
+	UpdatedAt           *time.Time               `json:"updated_at,omitempty"`
+	UpdatedBy           string                   `json:"updated_by"`
+	MessageID           string                   `json:"message_id"`
+	MessageAttachmentID string                   `json:"message_attachment_id"`
+	Subject             string                   `json:"subject,omitempty"`
+	InvoiceAttachments  *InsertInvoiceAttachment `json:"invoice_attachments,omitempty"`
+	ImportStatus        string                   `json:"import_status,omitempty"`
+	UserEmail           string                   `json:"user_email,omitempty"`
 }
 
 type InsertInvoiceAttachment struct {
