@@ -459,3 +459,103 @@ func SmartQuery(query string, dynamicQuery map[string]interface{}, hasuraEndpoin
 	}
 	return rd, err
 }
+
+type AppLink struct {
+	URL   string `json:"url"`
+	Label string `json:"label"`
+}
+
+type EmailAttachment struct {
+	Name       string `json:"name"`
+	UUID       string `json:"uuid"`
+	MimeType   string `json:"mime_type"`
+	Generation int64  `json:"generation"`
+}
+type FieldChanges struct {
+	Sections []FieldSection
+}
+type EmailObject struct {
+	ObjectType      string            `json:"object_type"`
+	ObjectUUID      string            `json:"object_uuid"`
+	ObjectName      string            `json:"object_name"`
+	InstanceID      int               `json:"instance_id"`
+	Subject         string            `json:"subject"`
+	CreatedBy       string            `json:"created_by"`
+	UpdatedBy       string            `json:"updated_by"`
+	Message         string            `json:"message"`
+	RecipientID     string            `json:"recipient_id"`
+	AppLink         AppLink           `json:"app_link,omitempty"`
+	EmailTemplateID int               `json:"email_template_id,omitempty"`
+	AttachmentArray []EmailAttachment `json:"attachment_array"`
+	FieldChanges    []FieldSection    `json:"field_changes"`
+}
+
+type FieldUpdate struct {
+	UpdatedBy string
+	Time      string
+	Field     string
+	Old       string `json:"Old,omitempty"`
+	New       string
+	Avatar    string
+}
+
+type FieldSection struct {
+	SectionTitle string
+	Updates      []FieldUpdate
+}
+
+func InsertEmail(HasuraEndpoint string, adminSecret string, recipientId string, subject string, message string, instanceID int, appLink AppLink, templateId int, attachmentArray []EmailAttachment, objectType string, objectName string, objectUUID string, fieldChanges []FieldSection) error {
+	insertMutation := `
+	mutation insert_email($objects: [email_insert_input!]!) {
+		insert_email(objects: $objects) {
+			affected_rows
+			returning {
+				id
+			}
+		}
+	}
+`
+
+	insertEmails := []EmailObject{}
+	insertEmail := EmailObject{ObjectType: objectType, ObjectUUID: objectUUID, ObjectName: objectName, RecipientID: recipientId, InstanceID: instanceID, CreatedBy: "rddropbot1", UpdatedBy: "rddropbot1", Message: message, Subject: subject, AppLink: appLink, AttachmentArray: attachmentArray, FieldChanges: fieldChanges}
+	if templateId > -1 {
+		insertEmail.EmailTemplateID = templateId
+	}
+	insertEmails = append(insertEmails, insertEmail)
+
+	payload := map[string]interface{}{
+		"query": insertMutation,
+		"variables": map[string]interface{}{
+			"objects": insertEmails,
+		},
+	}
+
+	b := new(bytes.Buffer)
+	json.NewEncoder(b).Encode(payload)
+
+	reqAPI, _ := http.NewRequest("POST", HasuraEndpoint, b)
+	log.Print(reqAPI.Body)
+
+	reqAPI.Header.Add("content-type", "application/json")
+	reqAPI.Header.Add("X-Hasura-Admin-Secret", adminSecret)
+
+	resAPI, err := http.DefaultClient.Do(reqAPI)
+	rd := Responsedata{}
+	if err != nil {
+		fmt.Println("hasura api error: ", err)
+		return err
+	}
+
+	decoder := json.NewDecoder(resAPI.Body)
+	err = decoder.Decode(&rd)
+	log.Println("Email Insert Status", rd.Data, resAPI)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	if len(rd.Errors) != 0 {
+		return &MyError{rd.Errors[0].Message}
+	} else {
+		return nil
+	}
+}
