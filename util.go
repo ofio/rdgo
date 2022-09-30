@@ -484,6 +484,8 @@ type EmailObject struct {
 	UpdatedBy       string            `json:"updated_by"`
 	Message         string            `json:"message"`
 	RecipientID     string            `json:"recipient_id"`
+	FunctionName    string            `json:"function_name,omitempty"`
+	WorkflowID      *int              `json:"workflow_id,omitempty"`
 	AppLink         AppLink           `json:"app_link,omitempty"`
 	EmailTemplateID int               `json:"email_template_id,omitempty"`
 	AttachmentArray []EmailAttachment `json:"attachment_array"`
@@ -504,7 +506,7 @@ type FieldSection struct {
 	Updates      []FieldUpdate
 }
 
-func InsertEmail(HasuraEndpoint string, adminSecret string, recipientId string, subject string, message string, instanceID int, appLink AppLink, templateId int, attachmentArray []EmailAttachment, objectType string, objectName string, objectUUID string, fieldChanges []FieldSection) error {
+func InsertEmail(HasuraEndpoint string, adminSecret string, recipientId string, subject string, message string, instanceID int, appLink AppLink, templateId int, attachmentArray []EmailAttachment, objectType string, objectName string, objectUUID string, fieldChanges []FieldSection, functionName string, workflowID int) error {
 	insertMutation := `
 	mutation insert_email($objects: [email_insert_input!]!) {
 		insert_email(objects: $objects) {
@@ -517,9 +519,12 @@ func InsertEmail(HasuraEndpoint string, adminSecret string, recipientId string, 
 `
 
 	insertEmails := []EmailObject{}
-	insertEmail := EmailObject{ObjectType: objectType, ObjectUUID: objectUUID, ObjectName: objectName, RecipientID: recipientId, InstanceID: instanceID, CreatedBy: "rddropbot1", UpdatedBy: "rddropbot1", Message: message, Subject: subject, AppLink: appLink, AttachmentArray: attachmentArray, FieldChanges: fieldChanges}
+	insertEmail := EmailObject{ObjectType: objectType, ObjectUUID: objectUUID, ObjectName: objectName, RecipientID: recipientId, InstanceID: instanceID, CreatedBy: "rddropbot1", UpdatedBy: "rddropbot1", Message: message, Subject: subject, AppLink: appLink, AttachmentArray: attachmentArray, FieldChanges: fieldChanges, FunctionName: functionName}
 	if templateId > -1 {
 		insertEmail.EmailTemplateID = templateId
+	}
+	if workflowID > -1 {
+		insertEmail.WorkflowID = &workflowID
 	}
 	insertEmails = append(insertEmails, insertEmail)
 
