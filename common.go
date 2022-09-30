@@ -562,16 +562,18 @@ type Responsedata struct {
 	Errors []Hasuraerror `json:"errors"`
 }
 type Attachment struct {
-	ID         *int   `json:"id,omitempty"`
-	UUID       string `json:"uuid,omitempty"`
-	ReadSecret string `json:"read_secret,omitempty"`
-	Generation int64  `json:"generation"`
-	Name       string `json:"name"`
-	Mime       string `json:"mime_type"`
-	Version    *int   `json:"version,omitempty"`
-	InstanceID int    `json:"instance_id,omitempty"`
-	CreatedBy  string `json:"created_by,omitempty"`
-	UpdatedBy  string `json:"updated_by,omitempty"`
+	ID                  *int   `json:"id,omitempty"`
+	UUID                string `json:"uuid,omitempty"`
+	ReadSecret          string `json:"read_secret,omitempty"`
+	Generation          int64  `json:"generation"`
+	Name                string `json:"name"`
+	Mime                string `json:"mime_type"`
+	Version             *int   `json:"version,omitempty"`
+	InstanceID          int    `json:"instance_id,omitempty"`
+	CreatedBy           string `json:"created_by,omitempty"`
+	CreatedByInstanceID *int   `json:"created_by_instance_id,omitempty"`
+	UpdatedByInstanceID *int   `json:"updated_by_instance_id,omitempty"`
+	UpdatedBy           string `json:"updated_by,omitempty"`
 }
 
 type EmailTemplate struct {
