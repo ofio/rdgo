@@ -233,15 +233,16 @@ func createTextBox(pdf *gopdf.Fpdf, x float64, y float64, w float64, h float64, 
 	pdf.CellFormat(w, h, businessName, "", 1, align, fill, 0, "")
 }
 
-func queryPurchaseOrder(instance int, poNumber string, revision int, token string, xHasuraAdminSecret string, hasuraEndpoint string) (PoHeader, error) {
-	queryPO := `query purchaseOrder($rev: Int, $instance_id: Int, $po_number: String) {
-		po_header(where: {_and: {}, rev: {_eq: $rev}, instance_id: {_eq: $instance_id}, po_number: {_eq: $po_number}}) {
+func queryPurchaseOrder(poHeaderID int, token string, xHasuraAdminSecret string, hasuraEndpoint string) (PoHeader, error) {
+	queryPO := `query purchaseOrder($id: Int) {
+		po_header(where: {rev: {_eq: $id}}) {
 			id
 			uuid
 			currency_code
 			created_by
 			po_number
 			payment_terms
+			instance_id
 			status
 			invoicing_instructions
 			terms_and_conditions
@@ -315,11 +316,11 @@ func queryPurchaseOrder(instance int, poNumber string, revision int, token strin
 				signed_date
 			}
 		}
-	}	
+	}
 	`
 
 	purchaseOrder := PoHeader{}
-	queryVar := map[string]interface{}{"rev": revision, "instance_id": instance, "po_number": poNumber}
+	queryVar := map[string]interface{}{"id": poHeaderID}
 	smartResponseData := Responsedata{}
 	err := NewError()
 	if len(xHasuraAdminSecret) > 0 {
@@ -343,10 +344,11 @@ func queryPurchaseOrder(instance int, poNumber string, revision int, token strin
 	return purchaseOrder, nil
 }
 
-func queryInvoice(invoiceID int, revision int, token string, xHasuraAdminSecret string, HasuraEndpoint string) (Invoice, error) {
+func queryInvoice(invoiceID int, token string, xHasuraAdminSecret string, HasuraEndpoint string) (Invoice, error) {
 	queryPO := `query invoice($id: Int!) {
 		invoice(where: {id: {_eq: $id}}) {
 			id
+			instance_id
 			created_by
 			currency_code
 			business_id
@@ -429,7 +431,7 @@ type SaveAttachmentResponse struct {
 	Generation int64
 }
 
-func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, poNumber string, invoiceID int, revision int, token string, adminSecret string, hasuraEndpoint string, isInvoice bool, bucket string, publicBucket string, saveAttachment bool) ([]byte, string, SaveAttachmentResponse, error) {
+func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, poHeaderID int, invoiceID int, token string, adminSecret string, hasuraEndpoint string, isInvoice bool, bucket string, publicBucket string, saveAttachment bool) ([]byte, string, SaveAttachmentResponse, error) {
 	poHeader := PoHeader{}
 	invoice := Invoice{}
 
@@ -440,8 +442,9 @@ func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, poNumber string,
 	err := NewError()
 	objectID := -1
 	createdBy := ""
+	instanceID := -1
 	if isInvoice {
-		invoice, err = queryInvoice(invoiceID, revision, token, adminSecret, hasuraEndpoint)
+		invoice, err = queryInvoice(invoiceID, token, adminSecret, hasuraEndpoint)
 		if err != nil {
 			fmt.Println(err)
 			return nil, "", response, err
@@ -452,8 +455,9 @@ func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, poNumber string,
 		fileName = "Invoice " + invoice.InvoiceNumber + " " + invoice.Business.Name + ".pdf"
 		objectID = invoice.ID
 		createdBy = invoice.CreatedBy
+		instanceID = invoice.InstanceID
 	} else {
-		poHeader, err = queryPurchaseOrder(instance, poNumber, revision, token, adminSecret, hasuraEndpoint)
+		poHeader, err = queryPurchaseOrder(poHeaderID, token, adminSecret, hasuraEndpoint)
 		if err != nil {
 			fmt.Println(err)
 			return nil, "", response, err
@@ -461,14 +465,15 @@ func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, poNumber string,
 		for _, settings := range poHeader.Instance.InstanceSettings {
 			brandingLogoUUID = settings.BrandingLogoUUID
 		}
-		fileName = "PO " + poNumber + " Rev " + strconv.Itoa(revision) + " " + poHeader.BusinessSupplier.Name + ".pdf"
+		fileName = "PO " + poHeader.PoNumber + " Rev " + strconv.Itoa(poHeader.Rev) + " " + poHeader.BusinessSupplier.Name + ".pdf"
 		objectID = poHeader.ID
 		createdBy = poHeader.CreatedBy
+		instanceID = poHeader.InstanceID
 	}
 
 	var logob []byte
 	if len(brandingLogoUUID) > 0 {
-		_, logob, err = ReadObj(brandingLogoUUID, strconv.Itoa(instance), publicBucket)
+		_, logob, err = ReadObj(brandingLogoUUID, strconv.Itoa(instanceID), publicBucket)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -482,7 +487,7 @@ func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, instance int, poNumber string,
 	}
 
 	if saveAttachment {
-		attachmentId, uuid, gen, err := savePDFAttachment(pdfb, objectID, createdBy, fileName, instance, isInvoice, hasuraEndpoint, adminSecret, token, bucket)
+		attachmentId, uuid, gen, err := savePDFAttachment(pdfb, objectID, createdBy, fileName, instanceID, isInvoice, hasuraEndpoint, adminSecret, token, bucket)
 		if err != nil {
 			fmt.Println(err)
 			return nil, "", response, err
