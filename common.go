@@ -295,8 +295,8 @@ type InsertInvoice struct {
 	CreatedBy          string                   `json:"created_by"`
 	UpdatedAt          *time.Time               `json:"updated_at,omitempty"`
 	UpdatedBy          string                   `json:"updated_by"`
-	MessageID          string                   `json:"message_id"`
-	SHA256             string                   `json:"sha_256"`
+	MessageID          string                   `json:"message_id,omitempty"`
+	SHA256             string                   `json:"sha_256,omitempty"`
 	Subject            string                   `json:"subject,omitempty"`
 	InvoiceAttachments *InsertInvoiceAttachment `json:"invoice_attachments,omitempty"`
 	ImportStatus       string                   `json:"import_status,omitempty"`
