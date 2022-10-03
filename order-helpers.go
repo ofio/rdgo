@@ -235,7 +235,7 @@ func createTextBox(pdf *gopdf.Fpdf, x float64, y float64, w float64, h float64, 
 
 func queryPurchaseOrder(poHeaderID int, token string, xHasuraAdminSecret string, hasuraEndpoint string) (PoHeader, error) {
 	queryPO := `query purchaseOrder($id: Int) {
-		po_header(where: {rev: {_eq: $id}}) {
+		po_header(where: {id: {_eq: $id}}) {
 			id
 			uuid
 			currency_code
