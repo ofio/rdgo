@@ -429,6 +429,7 @@ type SaveAttachmentResponse struct {
 	ID         int
 	UUID       string
 	Generation int64
+	Name       string
 }
 
 func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, poHeaderID int, invoiceID int, token string, adminSecret string, hasuraEndpoint string, isInvoice bool, bucket string, publicBucket string, saveAttachment bool) ([]byte, string, SaveAttachmentResponse, error) {
@@ -495,6 +496,7 @@ func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, poHeaderID int, invoiceID int,
 		response.ID = attachmentId
 		response.UUID = uuid
 		response.Generation = gen
+		response.Name = fileName
 	}
 
 	return pdfb, fileName, response, nil
