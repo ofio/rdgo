@@ -9,19 +9,23 @@ import (
 
 func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte, mleft, mtop, lineHeight, unitPriceWidth, totalPriceWidth, quantityWidth, sumWidth float64, cols []float64, lineItems [][]string, po PoHeader, invoice Invoice, isInvoice bool) {
 	yLocLeft := mtop
-	if len(logob) <= 0 {
-		businessName := ""
-		if isInvoice {
-			businessName = invoice.Instance.Business.Name
-		} else {
-			businessName = po.Instance.Business.Name
-		}
+
+	businessName := ""
+	if isInvoice {
+		businessName = invoice.Business.Name
 		createTextBox(pdf, mleft, mtop, pdf.GetStringWidth(businessName)+6, lineHeight*2, businessName, "L", false, 16, "Medium")
 		yLocLeft += (lineHeight * 3)
 	} else {
-		createLogo(pdf, image, mleft, mtop, "logo_pg"+strconv.Itoa(pageNum)+".png")
-		yLocLeft += (lineHeight * 4)
+		if len(logob) <= 0 {
+			businessName = po.Instance.Business.Name
+			createTextBox(pdf, mleft, mtop, pdf.GetStringWidth(businessName)+6, lineHeight*2, businessName, "L", false, 16, "Medium")
+			yLocLeft += (lineHeight * 3)
+		} else {
+			createLogo(pdf, image, mleft, mtop, "logo_pg"+strconv.Itoa(pageNum)+".png")
+			yLocLeft += (lineHeight * 4)
+		}
 	}
+
 	//move below business name
 	pdf.SetXY(mleft, yLocLeft)
 
@@ -289,9 +293,16 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 
 	y0 := pdf.GetY()
 	total := 0.0
-	for _, v := range po.PoLines {
-		total += v.Quantity * v.NetPricePerUnit
+	if isInvoice {
+		for _, v := range invoice.InvoiceLines {
+			total += v.Quantity * v.UnitPrice
+		}
+	} else {
+		for _, v := range po.PoLines {
+			total += v.Quantity * v.NetPricePerUnit
+		}
 	}
+
 	lc := accounting.LocaleInfo[po.CurrencyCode]
 	ac := accounting.Accounting{Symbol: po.CurrencyCode, Precision: 2, Thousand: lc.ThouSep, Decimal: lc.DecSep}
 

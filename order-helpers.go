@@ -395,6 +395,7 @@ func queryInvoice(invoiceID int, token string, xHasuraAdminSecret string, Hasura
 				quantity
 				uom_code
 				item_code
+				unit_price
 			}
 		}
 	}	
