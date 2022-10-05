@@ -360,7 +360,7 @@ func queryInvoice(invoiceID int, token string, xHasuraAdminSecret string, Hasura
 			approved_at
 			updated_at
 			bank_name
-			checks_payable_to
+			remit_to
 			business_phone
 			routing_number
 			account_number
