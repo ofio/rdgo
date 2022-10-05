@@ -94,7 +94,7 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 		}
 		yLocLeft += (lineHeight * 5)
 		if len(invoice.Instance.Business.Phone) > 0 {
-			billToItems = append(vendorItems, []string{"Phone", invoice.Instance.Business.Phone})
+			billToItems = append(billToItems, []string{"Phone", invoice.Instance.Business.Phone})
 			yLocLeft += (lineHeight * 1)
 		}
 	} else {
@@ -121,7 +121,6 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 	}
 	if isInvoice {
 		createContacts(billToItems, contactColumnWidths, lineHeight, pdf, firstColumnWidth)
-
 	}
 
 	createContacts(vendorItems, contactColumnWidths, lineHeight, pdf, firstColumnWidth)
