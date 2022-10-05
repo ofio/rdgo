@@ -119,11 +119,11 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 			yLocLeft += (lineHeight)
 		}
 	}
+
+	createContacts(vendorItems, contactColumnWidths, lineHeight, pdf, firstColumnWidth)
 	if isInvoice {
 		createContacts(billToItems, contactColumnWidths, lineHeight, pdf, firstColumnWidth)
 	}
-
-	createContacts(vendorItems, contactColumnWidths, lineHeight, pdf, firstColumnWidth)
 
 	//ORDER HEADER TEXT
 	pdf.SetXY(secondColumnXLoc, mtop)
