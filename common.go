@@ -56,7 +56,7 @@ type Invoice struct {
 	BusinessID          int            `json:"business_id"`
 	BusinessName        string         `json:"business_name"`
 	BusinessPhone       string         `json:"business_phone"`
-	ChecksPayableTo     string         `json:"checks_payable_to"`
+	RemitToName         string         `json:"remit_to_name"`
 	CreatedAt           time.Time      `json:"created_at"`
 	CreatedBy           string         `json:"created_by"`
 	CreatedByInstanceID int            `json:"created_by_instance_id"`
