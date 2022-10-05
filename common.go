@@ -53,7 +53,7 @@ type Invoice struct {
 	BankAccountName     string         `json:"bank_account_name"`
 	BankName            string         `json:"bank_name"`
 	SupplierAddress     string         `json:"supplier_address"`
-	SupplierID          int            `json:"supplier_id"`
+	BusinessID          int            `json:"business_id"`
 	SupplierName        string         `json:"supplier_name"`
 	SupplierPhone       string         `json:"supplier_phone"`
 	RemitToName         string         `json:"remit_to_name"`
