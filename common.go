@@ -315,6 +315,7 @@ type Business struct {
 	StateProvince string `json:"state_province"`
 	PostalCode    string `json:"postal_code"`
 	Country       string `json:"country"`
+	Phone         string `json:"phone"`
 }
 type Approver struct {
 	Email string `json:"email"`
@@ -487,6 +488,7 @@ type PoLines struct {
 	Quantity        float64   `json:"quantity"`
 	NetPricePerUnit float64   `json:"net_price_per_unit"`
 	CommodityID     int       `json:"commodity_id"`
+	LineAmount      float64   `json:"line_amount"`
 }
 
 type InvoiceLines struct {

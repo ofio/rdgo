@@ -66,9 +66,10 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 		createContacts(buyerItems, contactColumnWidths, lineHeight, pdf, firstColumnWidth)
 	}
 	vendorItems := [][]string{}
+	billToItems := [][]string{}
 	if isInvoice {
 		vendorItems = [][]string{
-			{"Supplier"},
+			{"Sold By"},
 			{"Name", invoice.Business.Name},
 			{"Address", invoice.Business.Address},
 			{"", invoice.Business.City + ", " + invoice.Business.StateProvince + " " + invoice.Business.PostalCode},
@@ -81,6 +82,19 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 		}
 		if len(invoice.UserEmail) > 0 {
 			vendorItems = append(vendorItems, []string{"Email", invoice.UserEmail})
+			yLocLeft += (lineHeight * 1)
+		}
+
+		billToItems = [][]string{
+			{"Bill To"},
+			{"Name", invoice.Instance.Business.Name},
+			{"Address", invoice.Instance.Business.Address},
+			{"", invoice.Instance.Business.City + ", " + invoice.Instance.Business.StateProvince + " " + invoice.Instance.Business.PostalCode},
+			{"", invoice.Instance.Business.Country},
+		}
+		yLocLeft += (lineHeight * 5)
+		if len(invoice.Instance.Business.Phone) > 0 {
+			billToItems = append(vendorItems, []string{"Phone", invoice.Instance.Business.Phone})
 			yLocLeft += (lineHeight * 1)
 		}
 	} else {
@@ -104,6 +118,10 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 			vendorItems = append(vendorItems, []string{"Phone", po.SupplierContact.Phone})
 			yLocLeft += (lineHeight)
 		}
+	}
+	if isInvoice {
+		createContacts(billToItems, contactColumnWidths, lineHeight, pdf, firstColumnWidth)
+
 	}
 
 	createContacts(vendorItems, contactColumnWidths, lineHeight, pdf, firstColumnWidth)
@@ -295,11 +313,11 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 	total := 0.0
 	if isInvoice {
 		for _, v := range invoice.InvoiceLines {
-			total += v.Quantity * v.UnitPrice
+			total += v.LineAmount
 		}
 	} else {
 		for _, v := range po.PoLines {
-			total += v.Quantity * v.NetPricePerUnit
+			total += v.LineAmount
 		}
 	}
 

@@ -306,6 +306,7 @@ func queryPurchaseOrder(poHeaderID int, token string, xHasuraAdminSecret string,
 				quantity
 				net_price_per_unit
 				commodity_id
+				line_amount
 			}
 			contract {
 				name
@@ -370,7 +371,14 @@ func queryInvoice(invoiceID int, token string, xHasuraAdminSecret string, Hasura
 			terms_and_conditions
 			instance {
 				business {
+					id
+					address
 					name
+					city
+					country
+					state_province
+					postal_code
+					phone
 				}
 				id
 				instance_settings {
@@ -396,6 +404,7 @@ func queryInvoice(invoiceID int, token string, xHasuraAdminSecret string, Hasura
 				uom_code
 				item_code
 				unit_price
+				line_amount
 			}
 		}
 	}	
@@ -622,7 +631,7 @@ func CreatePurchaseOrderInvoice(pdf *gopdf.Fpdf, po PoHeader, invoice Invoice, i
 				} else {
 					quantity = strconv.FormatFloat(v.Quantity, 'f', 3, 64)
 				}
-				strArr := []string{strconv.Itoa(v.LineNumber), v.ItemDescription, v.UomCode, quantity, ac.FormatMoney(v.UnitPrice), ac.FormatMoney(v.Quantity * v.UnitPrice)}
+				strArr := []string{strconv.Itoa(v.LineNumber), v.ItemDescription, v.UomCode, quantity, ac.FormatMoney(v.UnitPrice), ac.FormatMoney(v.LineAmount)}
 				lineItems = append(lineItems, strArr)
 			}
 		}
@@ -639,7 +648,7 @@ func CreatePurchaseOrderInvoice(pdf *gopdf.Fpdf, po PoHeader, invoice Invoice, i
 				} else {
 					quantity = strconv.FormatFloat(v.Quantity, 'f', 3, 64)
 				}
-				strArr := []string{strconv.Itoa(v.LineNumber), v.ItemDescription, v.Commodity.Name, quantity, ac.FormatMoney(v.NetPricePerUnit), ac.FormatMoney(v.Quantity * v.NetPricePerUnit)}
+				strArr := []string{strconv.Itoa(v.LineNumber), v.ItemDescription, v.Commodity.Name, quantity, ac.FormatMoney(v.NetPricePerUnit), ac.FormatMoney(v.LineAmount)}
 				lineItems = append(lineItems, strArr)
 			}
 		}
