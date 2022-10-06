@@ -83,6 +83,8 @@ type Invoice struct {
 	InvoiceLines        []InvoiceLines `json:"invoice_lines"`
 	Business            Business       `json:"business"`
 	ApprovalWorkflowID  int            `json:"approval_workflow_id"`
+	SHA256              string         `json:"sha_256,omitempty"`
+	InvoiceAttachments  []Attachment   `json:"invoice_attachments,omitempty"`
 }
 type ImportData struct {
 }
