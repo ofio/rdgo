@@ -2,6 +2,7 @@ package rdgo
 
 const QueryApprovalRequest string = `query approval_request($whereCond: approval_request_bool_exp) {
   approval_request(where: $whereCond) {
+		id
     uuid
     object_uuid
     cover_page
