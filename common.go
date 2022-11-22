@@ -425,6 +425,30 @@ type Data struct {
 	InvoiceAttachment          []Attachment                 `json:"invoice_attachment"`
 	ContractAttachment         []Attachment                 `json:"contract_attachment"`
 	PoHeaderAttachment         []Attachment                 `json:"po_header_attachment"`
+	PlaidBankPrivate           []PlaidBankPrivate           `json:"plaid_bank_private"`
+	PlaidBank                  []PlaidBank                  `json:"plaid_bank"`
+	PlaidBankAccount           []PlaidBankAccount           `json:"plaid_bank_account"`
+}
+
+type PlaidBank struct {
+	Name              string             `json:"name,omitempty"`
+	ID                string             `json:"id,omitempty"`
+	LogoBase64        string             `json:"logo_base64,omitempty"`
+	PlaidBankAccounts []PlaidBankAccount `json:"plaid_bank_accounts,omitempty"`
+	PlaidBankPrivate  PlaidBankPrivate   `json:"plaid_bank_private,omitempty"`
+}
+
+type PlaidBankAccount struct {
+	Name    string `json:"name,omitempty"`
+	ID      string `json:"id,omitempty"`
+	Type    string `json:"type,omitempty"`
+	Subtype string `json:"subtype,omitempty"`
+	Mask    string `json:"mask,omitempty"`
+}
+
+type PlaidBankPrivate struct {
+	AccessToken  string `json:"access_token,omitempty"`
+	LinkResponse string `json:"link_response,omitempty"`
 }
 
 type PoHeader struct {
