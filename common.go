@@ -427,7 +427,7 @@ type Data struct {
 	PoHeaderAttachment         []Attachment                 `json:"po_header_attachment"`
 	PlaidBankPrivate           []PlaidBankPrivate           `json:"plaid_bank_private"`
 	PlaidBank                  []PlaidBank                  `json:"plaid_bank"`
-	PlaidBankAccount           []PlaidBankAccount           `json:"plaid_bank_account"`
+	PlaidBankAccounts          []PlaidBankAccount           `json:"plaid_bank_accounts"`
 }
 
 type PlaidBank struct {
