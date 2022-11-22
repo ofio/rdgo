@@ -439,11 +439,12 @@ type PlaidBank struct {
 }
 
 type PlaidBankAccount struct {
-	Name    string `json:"name,omitempty"`
-	ID      string `json:"id,omitempty"`
-	Type    string `json:"type,omitempty"`
-	Subtype string `json:"subtype,omitempty"`
-	Mask    string `json:"mask,omitempty"`
+	Name      string `json:"name,omitempty"`
+	ID        string `json:"id,omitempty"`
+	AccountID string `json:"account_id,omitempty"`
+	Type      string `json:"type,omitempty"`
+	Subtype   string `json:"subtype,omitempty"`
+	Mask      string `json:"mask,omitempty"`
 }
 
 type PlaidBankPrivate struct {
