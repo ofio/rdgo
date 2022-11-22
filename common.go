@@ -432,7 +432,7 @@ type Data struct {
 
 type PlaidBank struct {
 	Name              string             `json:"name,omitempty"`
-	ID                string             `json:"id,omitempty"`
+	ID                int                `json:"id,omitempty"`
 	LogoBase64        string             `json:"logo_base64,omitempty"`
 	PlaidBankAccounts []PlaidBankAccount `json:"plaid_bank_accounts,omitempty"`
 	PlaidBankPrivate  PlaidBankPrivate   `json:"plaid_bank_private,omitempty"`
@@ -440,7 +440,7 @@ type PlaidBank struct {
 
 type PlaidBankAccount struct {
 	Name      string `json:"name,omitempty"`
-	ID        string `json:"id,omitempty"`
+	ID        int    `json:"id,omitempty"`
 	AccountID string `json:"account_id,omitempty"`
 	Type      string `json:"type,omitempty"`
 	Subtype   string `json:"subtype,omitempty"`
