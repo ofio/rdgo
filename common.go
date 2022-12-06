@@ -52,10 +52,7 @@ type Invoice struct {
 	ApprovedAt          time.Time      `json:"approved_at"`
 	BankAccountName     string         `json:"bank_account_name"`
 	BankName            string         `json:"bank_name"`
-	SupplierAddress     string         `json:"supplier_address"`
 	BusinessID          int            `json:"business_id"`
-	SupplierName        string         `json:"supplier_name"`
-	SupplierPhone       string         `json:"supplier_phone"`
 	RemitToName         string         `json:"remit_to_name"`
 	CreatedAt           time.Time      `json:"created_at"`
 	CreatedBy           string         `json:"created_by"`

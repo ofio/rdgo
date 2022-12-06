@@ -353,9 +353,6 @@ func queryInvoice(invoiceID int, token string, xHasuraAdminSecret string, Hasura
 			created_by
 			currency_code
 			business_id
-			supplier_phone
-			supplier_name
-			supplier_address
 			po_number
 			type
 			po_number

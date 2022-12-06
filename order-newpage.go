@@ -76,8 +76,8 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 			{"", invoice.Business.Country},
 		}
 		yLocLeft += (lineHeight * 5)
-		if len(invoice.SupplierPhone) > 0 {
-			vendorItems = append(vendorItems, []string{"Phone", invoice.SupplierPhone})
+		if len(invoice.Business.Phone) > 0 {
+			vendorItems = append(vendorItems, []string{"Phone", invoice.Business.Phone})
 			yLocLeft += (lineHeight * 1)
 		}
 		if len(invoice.UserEmail) > 0 {
