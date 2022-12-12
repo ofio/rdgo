@@ -437,6 +437,7 @@ type PlaidBank struct {
 }
 
 type InstanceSettingsPrivate struct {
+	ID              int    `json:"id,omitempty"`
 	StripeAccountID string `json:"stripe_account_id,omitempty"`
 }
 
