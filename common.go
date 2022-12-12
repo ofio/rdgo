@@ -415,6 +415,7 @@ type Data struct {
 	ApprovalRequest            []ApprovalRequest            `json:"approval_request"`
 	EmailTemplate              []EmailTemplate              `json:"email_template"`
 	Instance                   []Instance                   `json:"instance"`
+	InstanceSettingsPrivate    []InstanceSettingsPrivate    `json:"instance_settings_private"`
 	User                       []User                       `json:"user"`
 	DocumentGeneratorCondition []DocumentGeneratorCondition `json:"document_generator_condition"`
 	PoHeader                   []PoHeader                   `json:"po_header"`
@@ -433,6 +434,10 @@ type PlaidBank struct {
 	LogoBase64        string             `json:"logo_base64,omitempty"`
 	PlaidBankAccounts []PlaidBankAccount `json:"plaid_bank_accounts,omitempty"`
 	PlaidBankPrivate  PlaidBankPrivate   `json:"plaid_bank_private,omitempty"`
+}
+
+type InstanceSettingsPrivate struct {
+	StripeAccountID string `json:"stripe_account_id,omitempty"`
 }
 
 type PlaidBankAccount struct {
