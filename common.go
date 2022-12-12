@@ -288,6 +288,11 @@ type InsertApprovalRequest struct {
 	CoverPage                  bool                            `json:"cover_page"`
 }
 
+type InsertInstanceSettingsPrivate struct {
+	InstanceID      int    `json:"instance_id"`
+	StripeAccountID string `json:"stripe_account_id,omitempty"`
+}
+
 type InsertInvoice struct {
 	ID                 *int                     `json:"id,omitempty"`
 	From               string                   `json:"from"`
