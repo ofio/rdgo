@@ -291,6 +291,8 @@ type InsertApprovalRequest struct {
 type InsertInstanceSettingsPrivate struct {
 	InstanceID      int    `json:"instance_id"`
 	StripeAccountID string `json:"stripe_account_id,omitempty"`
+	CreatedBy       string `json:"created_by"`
+	UpdatedBy       string `json:"updated_by"`
 }
 
 type InsertInvoice struct {
