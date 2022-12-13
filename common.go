@@ -461,6 +461,23 @@ type PlaidBankAccount struct {
 	DwollaFundingSource string `json:"dwolla_funding_source,omitempty"`
 }
 
+type DwollaCustomer struct {
+	Links     Links     `json:"_links"`
+	ID        string    `json:"id"`
+	FirstName string    `json:"firstName"`
+	LastName  string    `json:"lastName"`
+	Email     string    `json:"email"`
+	Type      string    `json:"type"`
+	Status    string    `json:"status"`
+	Created   time.Time `json:"created"`
+}
+type Self struct {
+	Href string `json:"href"`
+}
+type Links struct {
+	Self Self `json:"self"`
+}
+
 type PlaidBankPrivate struct {
 	AccessToken  string `json:"access_token,omitempty"`
 	LinkResponse string `json:"link_response,omitempty"`
