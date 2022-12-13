@@ -582,11 +582,13 @@ type Role struct {
 	Name string `json:"name"`
 }
 type User struct {
-	Role  Role   `json:"role"`
-	ID    string `json:"id"`
-	Name  string `json:"name,omitempty"`
-	Email string `json:"email,omitempty"`
-	Phone string `json:"phone,omitempty"`
+	Role      Role   `json:"role"`
+	ID        string `json:"id"`
+	Name      string `json:"name,omitempty"`
+	FirstName string `json:"first_name,omitempty"`
+	LastName  string `json:"last_name,omitempty"`
+	Email     string `json:"email,omitempty"`
+	Phone     string `json:"phone,omitempty"`
 }
 
 type Hasuraerror struct {
