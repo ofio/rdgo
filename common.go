@@ -289,10 +289,11 @@ type InsertApprovalRequest struct {
 }
 
 type InsertInstanceSettingsPrivate struct {
-	InstanceID      int    `json:"instance_id"`
-	StripeAccountID string `json:"stripe_account_id,omitempty"`
-	CreatedBy       string `json:"created_by"`
-	UpdatedBy       string `json:"updated_by"`
+	InstanceID        int    `json:"instance_id"`
+	StripeAccountID   string `json:"stripe_account_id,omitempty"`
+	DwollaCustomerAPI string `json:"dwolla_customer_api,omitempty"`
+	CreatedBy         string `json:"created_by"`
+	UpdatedBy         string `json:"updated_by"`
 }
 
 type InsertInvoice struct {
@@ -444,18 +445,20 @@ type PlaidBank struct {
 }
 
 type InstanceSettingsPrivate struct {
-	ID              int    `json:"id,omitempty"`
-	StripeAccountID string `json:"stripe_account_id,omitempty"`
+	ID                int    `json:"id,omitempty"`
+	StripeAccountID   string `json:"stripe_account_id,omitempty"`
+	DwollaCustomerAPI string `json:"dwolla_customer_api,omitempty"`
 }
 
 type PlaidBankAccount struct {
-	Name        string `json:"name,omitempty"`
-	ID          int    `json:"id,omitempty"`
-	AccountID   string `json:"account_id,omitempty"`
-	Type        string `json:"type,omitempty"`
-	Subtype     string `json:"subtype,omitempty"`
-	Mask        string `json:"mask,omitempty"`
-	PlaidBankID int    `json:"plaid_bank_id,omitempty"`
+	Name                string `json:"name,omitempty"`
+	ID                  int    `json:"id,omitempty"`
+	AccountID           string `json:"account_id,omitempty"`
+	Type                string `json:"type,omitempty"`
+	Subtype             string `json:"subtype,omitempty"`
+	Mask                string `json:"mask,omitempty"`
+	PlaidBankID         int    `json:"plaid_bank_id,omitempty"`
+	DwollaFundingSource string `json:"dwolla_funding_source,omitempty"`
 }
 
 type PlaidBankPrivate struct {
