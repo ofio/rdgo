@@ -338,4 +338,7 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 	if len(po.TermsAndConditions) > 0 {
 		addFullWidthText("Terms and Conditions", po.TermsAndConditions, pdf, lineHeight, pdf.GetY()+lineHeight, sumWidth, 47, mleft, mtop)
 	}
+	if len(invoice.TermsAndConditions) > 0 {
+		addFullWidthText("Terms and Conditions", invoice.TermsAndConditions, pdf, lineHeight, pdf.GetY()+lineHeight, sumWidth, 47, mleft, mtop)
+	}
 }
