@@ -52,7 +52,7 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 			requesterItems = append(requesterItems, []string{"Entity", po.SoldToEntity})
 			yLocLeft += (lineHeight)
 		}
-		pdf.SetXY(secondColumnXLoc, yLocLeft)
+		pdf.SetXY(mleft, yLocLeft)
 		createAddressHeader(pdf, requesterItems, contactColumnWidths, lineHeight)
 	}
 
@@ -64,7 +64,7 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 			{"Email", po.BuyerJsonb.Email},
 		}
 		yLocLeft += (lineHeight * 3)
-		pdf.SetXY(secondColumnXLoc, yLocLeft)
+		pdf.SetXY(mleft, yLocLeft)
 		createAddressHeader(pdf, buyerItems, contactColumnWidths, lineHeight)
 	}
 	vendorItems := [][]string{}
@@ -121,7 +121,7 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 			yLocLeft += (lineHeight)
 		}
 	}
-	pdf.SetXY(secondColumnXLoc, yLocLeft)
+	pdf.SetXY(mleft, yLocLeft)
 	createAddressHeader(pdf, vendorItems, contactColumnWidths, lineHeight)
 	if isInvoice {
 		createAddressHeader(pdf, billToItems, contactColumnWidths, lineHeight)
