@@ -759,7 +759,32 @@ func addFullWidthText(title string, text string, pdf *gopdf.Fpdf, lineHeight flo
 }
 
 func createContacts(rows [][]string, cols []float64, lineHeight float64, pdf *gopdf.Fpdf, firstColumn float64) {
-	for r, row := range rows {
+
+	newRows := [][]string{}
+	for _, row := range rows {
+		rowHeight := 1
+
+		for i, txt := range row {
+			lines := pdf.SplitLines([]byte(txt), cols[i])
+			h := len(lines)
+			if h > rowHeight {
+				rowHeight = h
+			}
+		}
+
+		multiRow := make([][]string, rowHeight)
+
+		for i, txt := range row {
+			lines := pdf.SplitLines([]byte(txt), cols[i])
+			for x, line := range lines {
+				multiRow[x][i] = string(line)
+			}
+		}
+
+		newRows = append(newRows, multiRow...)
+	}
+
+	for r, row := range newRows {
 		curx, y := pdf.GetXY()
 		x := curx
 
