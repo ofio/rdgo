@@ -13,7 +13,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-func createAddressHeader(pdf *gopdf.Fpdf, rows [][]string, cols []float64, lineHeight float64, yLocRight float64) float64 {
+func createAddressHeader(pdf *gopdf.Fpdf, rows [][]string, cols []float64, lineHeight float64) {
 
 	for r, row := range rows {
 		curx, y := pdf.GetXY()
@@ -48,7 +48,6 @@ func createAddressHeader(pdf *gopdf.Fpdf, rows [][]string, cols []float64, lineH
 
 		pdf.SetXY(curx, y+height)
 	}
-	return yLocRight
 }
 
 func createTotalItems(pdf *gopdf.Fpdf, rows [][]string, cols []float64, lineHeight float64) {

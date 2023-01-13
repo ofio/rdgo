@@ -52,7 +52,8 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 			requesterItems = append(requesterItems, []string{"Entity", po.SoldToEntity})
 			yLocLeft += (lineHeight)
 		}
-		createContacts(requesterItems, contactColumnWidths, lineHeight, pdf, firstColumnWidth)
+		pdf.SetXY(secondColumnXLoc, yLocLeft)
+		createAddressHeader(pdf, requesterItems, contactColumnWidths, lineHeight)
 	}
 
 	buyerExists := len(po.BuyerJsonb.Email) > 0
@@ -63,7 +64,8 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 			{"Email", po.BuyerJsonb.Email},
 		}
 		yLocLeft += (lineHeight * 3)
-		createContacts(buyerItems, contactColumnWidths, lineHeight, pdf, firstColumnWidth)
+		pdf.SetXY(secondColumnXLoc, yLocLeft)
+		createAddressHeader(pdf, buyerItems, contactColumnWidths, lineHeight)
 	}
 	vendorItems := [][]string{}
 	billToItems := [][]string{}
@@ -119,10 +121,10 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 			yLocLeft += (lineHeight)
 		}
 	}
-
-	createContacts(vendorItems, contactColumnWidths, lineHeight, pdf, firstColumnWidth)
+	pdf.SetXY(secondColumnXLoc, yLocLeft)
+	createAddressHeader(pdf, vendorItems, contactColumnWidths, lineHeight)
 	if isInvoice {
-		createContacts(billToItems, contactColumnWidths, lineHeight, pdf, firstColumnWidth)
+		createAddressHeader(pdf, billToItems, contactColumnWidths, lineHeight)
 	}
 
 	//ORDER HEADER TEXT
@@ -202,7 +204,7 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 		}
 
 		pdf.SetXY(secondColumnXLoc, yLocRight)
-		_ = createAddressHeader(pdf, shipToItems, shipTo, lineHeight, yLocRight)
+		createAddressHeader(pdf, shipToItems, shipTo, lineHeight)
 		yLocRight = yLocRight + (lineHeight * 5)
 	}
 
@@ -218,7 +220,7 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 		}
 
 		pdf.SetXY(secondColumnXLoc, yLocRight)
-		_ = createAddressHeader(pdf, billToItems, billTo, lineHeight, yLocRight)
+		createAddressHeader(pdf, billToItems, billTo, lineHeight)
 		yLocRight = yLocRight + (lineHeight * 5)
 
 	}
