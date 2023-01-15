@@ -686,7 +686,7 @@ func CreatePurchaseOrderInvoice(pdf *gopdf.Fpdf, po PoHeader, invoice Invoice, i
 
 func createPOHeaderItems(pdf *gopdf.Fpdf, rows [][]string, cols []float64, lineHeight float64, mleft float64, mtop float64, sumWidth float64, secondColumnXLoc float64) {
 	_, y := pdf.GetXY()
-
+	pdf.SetCellMargin(0.5)
 	for _, row := range rows {
 		if y > 268 {
 			pdf.AddPage()
@@ -698,7 +698,7 @@ func createPOHeaderItems(pdf *gopdf.Fpdf, rows [][]string, cols []float64, lineH
 
 			if j == 0 {
 				pdf.SetFont("GothamHTF", "Medium", 10)
-				pdf.CellFormat(width, lineHeight, txt+" ", "", 0, "L", false, 0, "")
+				pdf.CellFormat(width, lineHeight, txt, "", 0, "L", false, 0, "")
 			} else {
 				pdf.SetFont("GothamHTF", "Book", 10)
 				lines := pdf.SplitLines([]byte(txt), width)
@@ -708,7 +708,7 @@ func createPOHeaderItems(pdf *gopdf.Fpdf, rows [][]string, cols []float64, lineH
 						pdf.SetXY(mleft, mtop)
 					}
 
-					pdf.CellFormat(sumWidth, lineHeight, string(line)+" ", "", 0, "L", false, 0, "")
+					pdf.CellFormat(sumWidth, lineHeight, string(line), "", 0, "L", false, 0, "")
 					if len(lines) > 1 && idx != len(lines)-1 {
 						xPos := secondColumnXLoc + width
 						y += (lineHeight)
@@ -759,7 +759,7 @@ func addFullWidthText(title string, text string, pdf *gopdf.Fpdf, lineHeight flo
 }
 
 func createContacts(rows [][]string, cols []float64, lineHeight float64, pdf *gopdf.Fpdf, firstColumn float64) {
-
+	pdf.SetCellMargin(0)
 	newRows := [][]string{}
 	for _, row := range rows {
 		rowHeight := 1
