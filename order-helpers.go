@@ -653,7 +653,7 @@ func CreatePurchaseOrderInvoice(pdf *gopdf.Fpdf, po PoHeader, invoice Invoice, i
 	}
 
 	pdf.AddPage()
-
+	pdf.SetCellMargin(0)
 	bc := make([]byte, len(*logob))
 	copy(bc, *logob)
 	CreateNewOrderPage(0, bc, pdf, bc, mleft, mtop, lineHeight, unitPriceWidth, totalPriceWidth, quantityWidth, sumWidth, cols, lineItems, po, invoice, isInvoice)
@@ -763,9 +763,20 @@ func createContacts(rows [][]string, cols []float64, lineHeight float64, pdf *go
 	newRows := [][]string{}
 	for _, row := range rows {
 		rowHeight := 1
+		columnWidth := 0.
+		for b, width := range cols {
+			if b < len(row) {
+				columnWidth += width
+			}
+		}
 
 		for i, txt := range row {
-			lines := pdf.SplitLines([]byte(txt), cols[i])
+			lines := [][]byte{}
+			if i == 0 {
+				lines = append(lines, []byte(txt))
+			} else {
+				lines = pdf.SplitLines([]byte(txt), cols[i])
+			}
 			h := len(lines)
 			if h > rowHeight {
 				rowHeight = h
@@ -773,9 +784,20 @@ func createContacts(rows [][]string, cols []float64, lineHeight float64, pdf *go
 		}
 
 		multiRow := make([][]string, rowHeight)
+		for i, _ := range multiRow {
+			multiRow[i] = make([]string, len(row))
+		}
 
 		for i, txt := range row {
-			lines := pdf.SplitLines([]byte(txt), cols[i])
+			lines := [][]byte{}
+			if i == 0 {
+				lines = append(lines, []byte(txt))
+			} else {
+				lines = pdf.SplitLines([]byte(txt), cols[i])
+				log.Println(txt)
+
+				log.Println(lines)
+			}
 			for x, line := range lines {
 				multiRow[x][i] = string(line)
 			}
