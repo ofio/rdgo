@@ -653,7 +653,7 @@ func CreatePurchaseOrderInvoice(pdf *gopdf.Fpdf, po PoHeader, invoice Invoice, i
 	}
 
 	pdf.AddPage()
-	pdf.SetCellMargin(1.5)
+	pdf.SetCellMargin(0.5)
 	bc := make([]byte, len(*logob))
 	copy(bc, *logob)
 	CreateNewOrderPage(0, bc, pdf, bc, mleft, mtop, lineHeight, unitPriceWidth, totalPriceWidth, quantityWidth, sumWidth, cols, lineItems, po, invoice, isInvoice)
