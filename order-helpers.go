@@ -653,7 +653,7 @@ func CreatePurchaseOrderInvoice(pdf *gopdf.Fpdf, po PoHeader, invoice Invoice, i
 	}
 
 	pdf.AddPage()
-	pdf.SetCellMargin(0.5)
+	pdf.SetCellMargin(0)
 	bc := make([]byte, len(*logob))
 	copy(bc, *logob)
 	CreateNewOrderPage(0, bc, pdf, bc, mleft, mtop, lineHeight, unitPriceWidth, totalPriceWidth, quantityWidth, sumWidth, cols, lineItems, po, invoice, isInvoice)
@@ -698,7 +698,7 @@ func createPOHeaderItems(pdf *gopdf.Fpdf, rows [][]string, cols []float64, lineH
 
 			if j == 0 {
 				pdf.SetFont("GothamHTF", "Medium", 10)
-				pdf.CellFormat(width, lineHeight, txt, "", 0, "L", false, 0, "")
+				pdf.CellFormat(width, lineHeight, txt+" ", "", 0, "L", false, 0, "")
 			} else {
 				pdf.SetFont("GothamHTF", "Book", 10)
 				lines := pdf.SplitLines([]byte(txt), width)
@@ -708,7 +708,7 @@ func createPOHeaderItems(pdf *gopdf.Fpdf, rows [][]string, cols []float64, lineH
 						pdf.SetXY(mleft, mtop)
 					}
 
-					pdf.CellFormat(sumWidth, lineHeight, string(line), "", 0, "L", false, 0, "")
+					pdf.CellFormat(sumWidth, lineHeight, string(line)+" ", "", 0, "L", false, 0, "")
 					if len(lines) > 1 && idx != len(lines)-1 {
 						xPos := secondColumnXLoc + width
 						y += (lineHeight)
