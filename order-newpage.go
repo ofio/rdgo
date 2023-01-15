@@ -33,7 +33,7 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 	var secondColumnWidth float64 = sumWidth/2 - 3
 	var secondColumnXLoc float64 = mleft + firstColumnWidth + 6
 
-	contactColumnWidths := []float64{firstColumnWidth/2 - 24, firstColumnWidth/2 + 24}
+	contactColumnWidths := []float64{firstColumnWidth/2 - 24, firstColumnWidth/2 + 36}
 
 	requesterExists := len(po.BuyerJsonb.Email) > 0
 	if requesterExists {
