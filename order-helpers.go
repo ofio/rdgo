@@ -794,9 +794,6 @@ func createContacts(rows [][]string, cols []float64, lineHeight float64, pdf *go
 				lines = append(lines, []byte(txt))
 			} else {
 				lines = pdf.SplitLines([]byte(txt), cols[i])
-				log.Println(txt)
-
-				log.Println(lines)
 			}
 			for x, line := range lines {
 				multiRow[x][i] = string(line)
