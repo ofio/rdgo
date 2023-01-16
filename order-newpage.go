@@ -128,48 +128,49 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 	//ORDER HEADER TEXT
 	pdf.SetXY(secondColumnXLoc, mtop)
 	//"order" header empty box
-	createTextBox(pdf, secondColumnXLoc, mtop, secondColumnWidth, lineHeight*2, "", "C", true, 18, "Book")
+	headerFontSize := 16.
+	createTextBox(pdf, secondColumnXLoc, mtop, secondColumnWidth, lineHeight*2, "", "C", true, headerFontSize, "Book")
 	//"order" header text
 	if isInvoice {
-		createTextBox(pdf, secondColumnXLoc, mtop, secondColumnWidth, (lineHeight*2)+1, "INVOICE", "C", false, 18, "Book")
+		createTextBox(pdf, secondColumnXLoc, mtop, secondColumnWidth, (lineHeight * 2), "INVOICE "+invoice.InvoiceNumber, "C", false, headerFontSize, "Book")
 	} else {
-		createTextBox(pdf, secondColumnXLoc, mtop, secondColumnWidth, (lineHeight*2)+1, "PURCHASE ORDER", "C", false, 18, "Book")
+		createTextBox(pdf, secondColumnXLoc, mtop, secondColumnWidth, (lineHeight * 2), "PO "+po.PoNumber, "C", false, headerFontSize, "Book")
 	}
 
-	createOrderRevision := func(rows [][]string, cols []float64, lineHeight float64) {
-		for _, row := range rows {
-			curx, y := pdf.GetXY()
-			x := curx
+	// createOrderRevision := func(rows [][]string, cols []float64, lineHeight float64) {
+	// 	for _, row := range rows {
+	// 		curx, y := pdf.GetXY()
+	// 		x := curx
 
-			for j, txt := range row {
-				width := cols[j]
+	// 		for j, txt := range row {
+	// 			width := cols[j]
 
-				if j%2 == 0 {
-					pdf.SetFont("GothamHTF", "Medium", 10)
-					pdf.CellFormat(width, lineHeight, txt, "", 0, "L", false, 0, "")
-				} else {
-					pdf.SetFont("GothamHTF", "Book", 10)
-					pdf.CellFormat(width, lineHeight, txt, "", 0, "R", false, 0, "")
-				}
+	// 			if j%2 == 0 {
+	// 				pdf.SetFont("GothamHTF", "Medium", 10)
+	// 				pdf.CellFormat(width, lineHeight, txt, "", 0, "L", false, 0, "")
+	// 			} else {
+	// 				pdf.SetFont("GothamHTF", "Book", 10)
+	// 				pdf.CellFormat(width, lineHeight, txt, "", 0, "R", false, 0, "")
+	// 			}
 
-				// pdf.MultiCell(width, lineHeight, txt, "", "", false)
-				x += width
-				pdf.SetXY(x, y)
-			}
-			pdf.SetXY(curx, y+lineHeight)
-		}
-	}
+	// 			// pdf.MultiCell(width, lineHeight, txt, "", "", false)
+	// 			x += width
+	// 			pdf.SetXY(x, y)
+	// 		}
+	// 		pdf.SetXY(curx, y+lineHeight)
+	// 	}
+	// }
 	revWidth := (secondColumnWidth) / 4
-	orderRevCols := []float64{revWidth, revWidth, revWidth, revWidth}
-	orderRevisionDetails := [][]string{}
+	// orderRevCols := []float64{revWidth, revWidth, revWidth, revWidth}
+	// orderRevisionDetails := [][]string{}
 	if isInvoice {
 		//orderRevisionDetails = append(orderRevisionDetails, []string{"Order", invoice.InvoiceNumber, "", ""})
 	} else {
-		orderRevisionDetails = append(orderRevisionDetails, []string{"Order", po.PoNumber, "Revision", strconv.Itoa(po.Rev)})
+		//orderRevisionDetails = append(orderRevisionDetails, []string{"Order", po.PoNumber, "Revision", strconv.Itoa(po.Rev)})
 	}
 
 	pdf.SetXY(secondColumnXLoc, mtop+(lineHeight*2))
-	createOrderRevision(orderRevisionDetails, orderRevCols, lineHeight)
+	// createOrderRevision(orderRevisionDetails, orderRevCols, lineHeight)
 
 	//		{"Order", strconv.Itoa(po.PONumber),"Revision", strconv.Itoa(po.Rev)},
 	poCols := []float64{revWidth * 2, revWidth * 2}
@@ -183,6 +184,7 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 		}
 	} else {
 		poHeaderItems = [][]string{
+			{"Revision", strconv.Itoa(po.Rev)},
 			{"Date", po.UpdatedAt.Format("January 2, 2006")},
 			{"Payment Terms", po.PaymentTerms},
 		}

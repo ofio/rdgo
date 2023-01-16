@@ -653,6 +653,7 @@ func CreatePurchaseOrderInvoice(pdf *gopdf.Fpdf, po PoHeader, invoice Invoice, i
 	}
 
 	pdf.AddPage()
+	pdf.SetCellMargin(0)
 	bc := make([]byte, len(*logob))
 	copy(bc, *logob)
 	CreateNewOrderPage(0, bc, pdf, bc, mleft, mtop, lineHeight, unitPriceWidth, totalPriceWidth, quantityWidth, sumWidth, cols, lineItems, po, invoice, isInvoice)
@@ -685,7 +686,6 @@ func CreatePurchaseOrderInvoice(pdf *gopdf.Fpdf, po PoHeader, invoice Invoice, i
 
 func createPOHeaderItems(pdf *gopdf.Fpdf, rows [][]string, cols []float64, lineHeight float64, mleft float64, mtop float64, sumWidth float64, secondColumnXLoc float64) {
 	_, y := pdf.GetXY()
-	pdf.SetCellMargin(0.5)
 	for _, row := range rows {
 		if y > 268 {
 			pdf.AddPage()
@@ -758,7 +758,7 @@ func addFullWidthText(title string, text string, pdf *gopdf.Fpdf, lineHeight flo
 }
 
 func createContacts(rows [][]string, cols []float64, lineHeight float64, pdf *gopdf.Fpdf, firstColumn float64) {
-	pdf.SetCellMargin(0)
+
 	newRows := [][]string{}
 	for _, row := range rows {
 		rowHeight := 1
