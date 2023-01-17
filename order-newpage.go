@@ -194,7 +194,6 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 
 	if len(po.BusinessShipTo.Name) > 0 {
 		yLocRight := pdf.GetY()
-		shipTo := []float64{secondColumnWidth}
 		shipToItems := [][]string{
 			{"Ship To"},
 			{po.BusinessShipTo.Name},
@@ -204,13 +203,14 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 		}
 
 		pdf.SetXY(secondColumnXLoc, yLocRight)
-		createAddressHeader(pdf, shipToItems, shipTo, lineHeight)
+		createContacts(shipToItems, []float64{secondColumnWidth}, lineHeight, pdf, secondColumnWidth)
+
 		yLocRight = yLocRight + (lineHeight * 5)
 	}
 
 	if len(po.BusinessBillTo.Name) > 0 {
 		yLocRight := pdf.GetY()
-		billTo := []float64{secondColumnWidth}
+
 		billToItems := [][]string{
 			{"Invoice To"},
 			{po.BusinessBillTo.Name},
@@ -220,7 +220,7 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 		}
 
 		pdf.SetXY(secondColumnXLoc, yLocRight)
-		createAddressHeader(pdf, billToItems, billTo, lineHeight)
+		createContacts(billToItems, []float64{secondColumnWidth}, lineHeight, pdf, secondColumnWidth)
 		yLocRight = yLocRight + (lineHeight * 5)
 
 	}
