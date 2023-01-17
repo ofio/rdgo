@@ -815,7 +815,7 @@ func createContacts(rows [][]string, cols []float64, lineHeight float64, pdf *go
 				pdf.SetFont("GothamHTF", "Medium", 10)
 				pdf.CellFormat(firstColumn, lineHeight, txt, "", 0, "C", true, 0, "")
 			} else {
-				if j == 0 {
+				if j == 0 && len(row) > 1 {
 					pdf.SetFont("GothamHTF", "Medium", 10)
 					pdf.CellFormat(width, lineHeight, txt, "", 0, "L", fill, 0, "")
 				} else {
