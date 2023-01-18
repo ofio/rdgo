@@ -762,16 +762,12 @@ func createContacts(rows [][]string, cols []float64, lineHeight float64, pdf *go
 	newRows := [][]string{}
 	for _, row := range rows {
 		rowHeight := 1
-		columnWidth := 0.
-		for b, width := range cols {
-			if b < len(row) {
-				columnWidth += width
-			}
-		}
 
 		for i, txt := range row {
 			lines := [][]byte{}
-			if i == 0 {
+			if len(row) == 1 {
+				lines = pdf.SplitLines([]byte(txt), firstColumn)
+			} else if len(row) > 1 && i == 0 {
 				lines = append(lines, []byte(txt))
 			} else {
 				lines = pdf.SplitLines([]byte(txt), cols[i])
@@ -789,7 +785,9 @@ func createContacts(rows [][]string, cols []float64, lineHeight float64, pdf *go
 
 		for i, txt := range row {
 			lines := [][]byte{}
-			if i == 0 {
+			if len(row) == 1 {
+				lines = pdf.SplitLines([]byte(txt), firstColumn)
+			} else if len(row) > 1 && i == 0 {
 				lines = append(lines, []byte(txt))
 			} else {
 				lines = pdf.SplitLines([]byte(txt), cols[i])

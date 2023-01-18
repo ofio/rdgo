@@ -132,9 +132,9 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 	createTextBox(pdf, secondColumnXLoc, mtop, secondColumnWidth, lineHeight*2, "", "C", true, headerFontSize, "Book")
 	//"order" header text
 	if isInvoice {
-		createTextBox(pdf, secondColumnXLoc, mtop, secondColumnWidth, (lineHeight * 2), "INVOICE "+invoice.InvoiceNumber, "C", false, headerFontSize, "Book")
+		createTextBox(pdf, secondColumnXLoc, mtop+(lineHeight/16), secondColumnWidth, (lineHeight * 2), "INVOICE "+invoice.InvoiceNumber, "C", false, headerFontSize, "Book")
 	} else {
-		createTextBox(pdf, secondColumnXLoc, mtop, secondColumnWidth, (lineHeight * 2), "PO "+po.PoNumber, "C", false, headerFontSize, "Book")
+		createTextBox(pdf, secondColumnXLoc, mtop+(lineHeight/16), secondColumnWidth, (lineHeight * 2), "PO "+po.PoNumber, "C", false, headerFontSize, "Book")
 	}
 
 	// createOrderRevision := func(rows [][]string, cols []float64, lineHeight float64) {
