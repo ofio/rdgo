@@ -14,7 +14,6 @@ import (
 )
 
 func createAddressHeader(pdf *gopdf.Fpdf, rows [][]string, cols []float64, lineHeight float64) {
-
 	for r, row := range rows {
 		curx, y := pdf.GetXY()
 		x := curx
@@ -120,7 +119,7 @@ func createLineItem(pdf *gopdf.Fpdf, rows [][]string, cols []float64, lineHeight
 			y = mtop
 			fill := true
 
-			//insert row header
+			// insert row header
 			for j, txt := range rows[0] {
 				width := cols[j]
 				pdf.SetFont("GothamHTF", "Medium", 10)
@@ -306,6 +305,8 @@ func queryPurchaseOrder(poHeaderID int, token string, xHasuraAdminSecret string,
 				net_price_per_unit
 				commodity_id
 				line_amount
+				uom_code
+				item_code
 			}
 			contract {
 				name
@@ -440,7 +441,7 @@ type SaveAttachmentResponse struct {
 	Name       string
 }
 
-func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, poHeaderID int, invoiceID int, token string, adminSecret string, hasuraEndpoint string, isInvoice bool, bucket string, publicBucket string, saveAttachment bool) ([]byte, string, SaveAttachmentResponse, error) {
+func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, poHeaderID int, invoiceID int, token string, adminSecret string, hasuraEndpoint string, isInvoice bool, bucket string, publicBucket string, saveAttachment bool, showItemCode bool) ([]byte, string, SaveAttachmentResponse, error) {
 	poHeader := PoHeader{}
 	invoice := Invoice{}
 
@@ -489,7 +490,7 @@ func InvoicePurchaseOrderHandler(pdf *gopdf.Fpdf, poHeaderID int, invoiceID int,
 	}
 
 	var pdfb []byte
-	pdfb, err = CreatePurchaseOrderInvoice(pdf, poHeader, invoice, isInvoice, &logob)
+	pdfb, err = CreatePurchaseOrderInvoice(pdf, poHeader, invoice, isInvoice, &logob, showItemCode)
 	if err != nil {
 		fmt.Println(err)
 		return nil, "", response, err
@@ -580,6 +581,7 @@ func savePDFAttachment(pdfb []byte, objectID int, createdBy string, fileName str
 	}
 	return id, uuid, gen, nil
 }
+
 func createLogo(pdf *gopdf.Fpdf, bc []byte, mleft float64, mtop float64, imageName string) {
 	opt := gopdf.ImageOptions{
 		ImageType:             "image/png",
@@ -593,7 +595,7 @@ func createLogo(pdf *gopdf.Fpdf, bc []byte, mleft float64, mtop float64, imageNa
 	createBusinessLogo()
 }
 
-func CreatePurchaseOrderInvoice(pdf *gopdf.Fpdf, po PoHeader, invoice Invoice, isInvoice bool, logob *[]byte) ([]byte, error) {
+func CreatePurchaseOrderInvoice(pdf *gopdf.Fpdf, po PoHeader, invoice Invoice, isInvoice bool, logob *[]byte, showItemCode bool) ([]byte, error) {
 	var err error
 
 	lc := accounting.LocaleInfo[po.CurrencyCode]
@@ -634,10 +636,19 @@ func CreatePurchaseOrderInvoice(pdf *gopdf.Fpdf, po PoHeader, invoice Invoice, i
 			}
 		}
 	} else {
-		lineItems = append(lineItems, []string{"Item", "Description", "Commodity", "Quantity", "Unit Price", "Total"})
+		if showItemCode {
+			lineItems = append(lineItems, []string{"Item", "Item Code", "Description", "Commodity", "UOM", "Quantity", "Unit Price", "Total"})
+		} else {
+			lineItems = append(lineItems, []string{"Item", "Description", "Commodity", "UOM", "Quantity", "Unit Price", "Total"})
+		}
 		if len(po.PoLines) == 0 {
-			strArr := []string{"", "", "", "", "", "-"}
-			lineItems = append(lineItems, strArr, strArr, strArr, strArr)
+			if showItemCode {
+				strArr := []string{"", "", "", "", "", "", "", "-"}
+				lineItems = append(lineItems, strArr, strArr, strArr, strArr)
+			} else {
+				strArr := []string{"", "", "", "", "", "", "-"}
+				lineItems = append(lineItems, strArr, strArr, strArr, strArr)
+			}
 		} else {
 			for _, v := range po.PoLines {
 				quantity := ""
@@ -646,8 +657,13 @@ func CreatePurchaseOrderInvoice(pdf *gopdf.Fpdf, po PoHeader, invoice Invoice, i
 				} else {
 					quantity = strconv.FormatFloat(v.Quantity, 'f', 3, 64)
 				}
-				strArr := []string{strconv.Itoa(v.LineNumber), v.ItemDescription, v.Commodity.Name, quantity, ac.FormatMoney(v.NetPricePerUnit), ac.FormatMoney(v.LineAmount)}
-				lineItems = append(lineItems, strArr)
+				if showItemCode {
+					strArr := []string{strconv.Itoa(v.LineNumber), v.ItemCode, v.ItemDescription, v.Commodity.Name, v.UomCode, quantity, ac.FormatMoney(v.NetPricePerUnit), ac.FormatMoney(v.LineAmount)}
+					lineItems = append(lineItems, strArr)
+				} else {
+					strArr := []string{strconv.Itoa(v.LineNumber), v.ItemDescription, v.Commodity.Name, v.UomCode, quantity, ac.FormatMoney(v.NetPricePerUnit), ac.FormatMoney(v.LineAmount)}
+					lineItems = append(lineItems, strArr)
+				}
 			}
 		}
 	}
@@ -739,7 +755,7 @@ func addFullWidthText(title string, text string, pdf *gopdf.Fpdf, lineHeight flo
 
 	pdf.CellFormat(titleWidth, lineHeight, title, "", 0, "L", false, 0, "")
 	pdf.SetFont("GothamHTF", "Book", 10)
-	//keep on same line
+	// keep on same line
 	pdf.SetXY(marginLeft+titleWidth, yLoc+lineHeight)
 	lines := pdf.SplitLines([]byte(text), sumWidth)
 	for _, line := range lines {
@@ -758,7 +774,6 @@ func addFullWidthText(title string, text string, pdf *gopdf.Fpdf, lineHeight flo
 }
 
 func createContacts(rows [][]string, cols []float64, lineHeight float64, pdf *gopdf.Fpdf, firstColumn float64) {
-
 	newRows := [][]string{}
 	for _, row := range rows {
 		rowHeight := 1
@@ -779,7 +794,7 @@ func createContacts(rows [][]string, cols []float64, lineHeight float64, pdf *go
 		}
 
 		multiRow := make([][]string, rowHeight)
-		for i, _ := range multiRow {
+		for i := range multiRow {
 			multiRow[i] = make([]string, len(row))
 		}
 
@@ -820,7 +835,6 @@ func createContacts(rows [][]string, cols []float64, lineHeight float64, pdf *go
 					pdf.SetFont("GothamHTF", "Book", 10)
 					pdf.CellFormat(width, lineHeight, txt, "", 0, "L", fill, 0, "")
 				}
-
 			}
 
 			// pdf.MultiCell(width, lineHeight, txt, "", "", false)
