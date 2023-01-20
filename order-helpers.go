@@ -613,11 +613,11 @@ func CreatePurchaseOrderInvoice(pdf *gopdf.Fpdf, po PoHeader, invoice Invoice, i
 	unitPriceWidth := 30.
 	totalPriceWidth := 30.
 	commodityWidth := 40.
-	descriptionWidth := sumWidth - commodityWidth - itemWidth - quantityWidth - unitPriceWidth - totalPriceWidth - itemCodeWidth - uomCodeWidth
+	descriptionWidth := sumWidth - commodityWidth - itemWidth - quantityWidth - unitPriceWidth - totalPriceWidth - uomCodeWidth
 	cols := []float64{itemWidth, descriptionWidth, uomCodeWidth, commodityWidth, quantityWidth, unitPriceWidth, totalPriceWidth}
 
 	if showItemCode {
-		descriptionWidth = sumWidth - commodityWidth - itemWidth - quantityWidth - unitPriceWidth - totalPriceWidth - uomCodeWidth
+		descriptionWidth = sumWidth - commodityWidth - itemWidth - quantityWidth - unitPriceWidth - totalPriceWidth - uomCodeWidth - itemCodeWidth
 		cols = []float64{itemWidth, itemCodeWidth, descriptionWidth, uomCodeWidth, commodityWidth, quantityWidth, unitPriceWidth, totalPriceWidth}
 	}
 	lineHeight := 6.
