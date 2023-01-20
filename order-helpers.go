@@ -91,49 +91,61 @@ func createTotalItems(pdf *gopdf.Fpdf, rows [][]string, cols []float64, lineHeig
 
 func createLineItem(pdf *gopdf.Fpdf, rows [][]string, cols []float64, lineHeight float64, mtop float64, mleft float64) {
 	fill := true
-	for r, row := range rows {
+
+	newRows := [][]string{}
+	rowFill := []bool{}
+	for _, row := range rows {
+		numRows := 1
+		for i, txt := range row {
+			lines := [][]byte{}
+			lines = pdf.SplitLines([]byte(txt), cols[i])
+
+			h := len(lines)
+			if h > numRows {
+				numRows = h
+			}
+		}
+
+		multiRow := make([][]string, numRows)
+		for i := range multiRow {
+			multiRow[i] = make([]string, len(row))
+		}
+
+		for i, txt := range row {
+			lines := [][]byte{}
+			lines = pdf.SplitLines([]byte(txt), cols[i])
+			for x, line := range lines {
+				multiRow[x][i] = string(line)
+			}
+		}
+
+		for i := 0; i < numRows; i++ { // start of the execution block
+			rowFill = append(rowFill, fill)
+
+		}
+		fill = !fill
+		newRows = append(newRows, multiRow...)
+	}
+	log.Println(newRows)
+
+	for r, row := range newRows {
+
 		curx, y := pdf.GetXY()
 
 		x := curx
-
-		description := row[1]
-		splitLinesDescription := pdf.SplitLines([]byte(description), cols[1])
-		numDescriptionRows := len(splitLinesDescription)
-
-		commodity := row[2]
-		splitLinesCommodity := pdf.SplitLines([]byte(commodity), cols[2])
-		numCommodityRows := len(splitLinesCommodity)
-
-		numRows := 1
-		if numCommodityRows > 1 || numDescriptionRows > 1 {
-			if numCommodityRows > numDescriptionRows {
-				numRows = numCommodityRows
-			} else {
-				numRows = numDescriptionRows
-			}
-		}
 
 		// _, ht, _ := pdf.PageSize(1)
 		if y > 268 {
 			pdf.AddPage()
 			y = mtop
-			fill := true
-
+			fill = true
 			// insert row header
 			for j, txt := range rows[0] {
 				width := cols[j]
 				pdf.SetFont("GothamHTF", "Medium", 10)
-				if j == 0 {
+				if j < 4 {
 					pdf.CellFormat(width, lineHeight, txt, "", 0, "L", fill, 0, "")
-				} else if j == 1 {
-					pdf.CellFormat(width, lineHeight, txt, "", 0, "L", fill, 0, "")
-				} else if j == 2 {
-					pdf.CellFormat(width, lineHeight, txt, "", 0, "L", fill, 0, "")
-				} else if j == 3 {
-					pdf.CellFormat(width, lineHeight, txt, "", 0, "R", fill, 0, "")
-				} else if j == 4 {
-					pdf.CellFormat(width, lineHeight, txt, "", 0, "R", fill, 0, "")
-				} else if j == 5 {
+				} else {
 					pdf.CellFormat(width, lineHeight, txt, "", 0, "R", fill, 0, "")
 				}
 
@@ -146,79 +158,40 @@ func createLineItem(pdf *gopdf.Fpdf, rows [][]string, cols []float64, lineHeight
 			pdf.SetXY(x, y)
 		}
 
-		rowHeight := float64(numRows) * lineHeight
-		if rowHeight <= lineHeight {
-			rowHeight = lineHeight
-		}
+		for j, txt := range row {
+			width := cols[j]
 
-		for idx := 0; idx < numRows; idx++ {
-			if idx != 0 {
-				x = mleft
-				y += lineHeight
-				if y > 268 {
-					fill = true
-					pdf.AddPage()
-					y = mtop
-					pdf.SetXY(x, y)
-				} else {
-					pdf.SetXY(x, y)
-				}
+			pdf.SetFillColor(240, 240, 240)
+
+			if r == 0 {
+				pdf.SetFont("GothamHTF", "Medium", 10)
 			}
-			for j, txt := range row {
-				width := cols[j]
-
-				pdf.SetFillColor(240, 240, 240)
-
-				if r == 0 {
-					fill = true
-					pdf.SetFont("GothamHTF", "Medium", 10)
-				}
-				if fill {
-					pdf.SetFillColor(244, 244, 244)
-					pdf.SetFont("GothamHTF", "Book", 10)
-					pdf.SetDrawColor(255, 255, 255)
-					pdf.SetLineWidth(0)
-					pdf.Rect(x, y, width, rowHeight, "")
-				} else {
-					pdf.SetFont("GothamHTF", "Book", 10)
-					pdf.SetDrawColor(255, 255, 255)
-					pdf.SetLineWidth(0)
-					pdf.Rect(x, y, width, rowHeight, "")
-				}
-
-				align := "L"
-				if j > 2 {
-					align = "R"
-				}
-				text := ""
-				if idx == 0 {
-					text = txt
-				}
-
-				if j == 1 {
-					if idx < len(splitLinesDescription) {
-						text = string(splitLinesDescription[idx])
-					}
-				} else if j == 2 {
-					if idx < len(splitLinesCommodity) {
-						text = string(splitLinesCommodity[idx])
-					}
-				}
-
-				pdf.CellFormat(width, lineHeight, text, "", 0, align, fill, 0, "")
-				x += width
-
-				pdf.SetXY(x, y)
+			if rowFill[r] {
+				pdf.SetFillColor(244, 244, 244)
+				pdf.SetFont("GothamHTF", "Book", 10)
+				pdf.SetDrawColor(255, 255, 255)
+				pdf.SetLineWidth(0)
+				// pdf.Rect(x, y, width, lineHeight, "")
+			} else {
+				pdf.SetFont("GothamHTF", "Book", 10)
+				pdf.SetDrawColor(255, 255, 255)
+				pdf.SetLineWidth(0)
+				// pdf.Rect(x, y, width, lineHeight, "")
 			}
-		}
 
-		if fill {
-			fill = false
-		} else {
-			fill = true
+			align := "L"
+			if j > 3 {
+				align = "R"
+			}
+
+			pdf.CellFormat(width, lineHeight, txt, "", 0, align, rowFill[r], 0, "")
+			x += width
+
+			pdf.SetXY(x, y)
 		}
 
 		pdf.SetXY(curx, y+lineHeight)
+		fill = !fill
 	}
 }
 
@@ -606,13 +579,13 @@ func CreatePurchaseOrderInvoice(pdf *gopdf.Fpdf, po PoHeader, invoice Invoice, i
 	mleft, mtop, mright, _ := pdf.GetMargins()
 	_ = mtop
 	sumWidth := pagew - mleft - mright
-	itemWidth := 15.
+	itemWidth := 10.
 	itemCodeWidth := 15.
 	uomCodeWidth := 15.
 	quantityWidth := 20.
 	unitPriceWidth := 30.
 	totalPriceWidth := 30.
-	commodityWidth := 40.
+	commodityWidth := 30.
 	descriptionWidth := sumWidth - commodityWidth - itemWidth - quantityWidth - unitPriceWidth - totalPriceWidth - uomCodeWidth
 	cols := []float64{itemWidth, descriptionWidth, commodityWidth, uomCodeWidth, quantityWidth, unitPriceWidth, totalPriceWidth}
 
