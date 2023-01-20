@@ -85,8 +85,7 @@ type Invoice struct {
 	FromUserID          string         `json:"from_user_id,omitempty"`
 	From                string         `json:"from,omitempty"`
 }
-type ImportData struct {
-}
+type ImportData struct{}
 
 type UserJsonb struct {
 	Email      string `json:"email"`
@@ -271,7 +270,7 @@ type ApprovalRequest struct {
 	CoverPage                  bool                        `json:"cover_page"`
 }
 
-//note
+// note
 type InsertApprovalRequest struct {
 	ObjectUUID                 string                          `json:"object_uuid"`
 	ObjectType                 string                          `json:"object_type"`
@@ -549,6 +548,8 @@ type PoLines struct {
 	NetPricePerUnit float64   `json:"net_price_per_unit"`
 	CommodityID     int       `json:"commodity_id"`
 	LineAmount      float64   `json:"line_amount"`
+	UomCode         string    `json:"uom_code"`
+	ItemCode        string    `json:"item_code"`
 }
 
 type InvoiceLines struct {
