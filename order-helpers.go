@@ -625,7 +625,7 @@ func CreatePurchaseOrderInvoice(pdf *gopdf.Fpdf, po PoHeader, invoice Invoice, i
 	lineItems := [][]string{}
 
 	if isInvoice {
-		lineItems = append(lineItems, []string{"Item", "Description", "UOM", "Quantity", "Unit Price", "Total"})
+		lineItems = append(lineItems, []string{"No.", "Description", "UOM", "Quantity", "Unit Price", "Total"})
 		if len(invoice.InvoiceLines) == 0 {
 			strArr := []string{"", "", "", "", "", "-"}
 			lineItems = append(lineItems, strArr, strArr, strArr, strArr)
@@ -643,9 +643,9 @@ func CreatePurchaseOrderInvoice(pdf *gopdf.Fpdf, po PoHeader, invoice Invoice, i
 		}
 	} else {
 		if showItemCode {
-			lineItems = append(lineItems, []string{"Item", "Item Code", "Description", "Commodity", "UOM", "Quantity", "Unit Price", "Total"})
+			lineItems = append(lineItems, []string{"No.", "Code", "Description", "Commodity", "UOM", "Quantity", "Unit Price", "Total"})
 		} else {
-			lineItems = append(lineItems, []string{"Item", "Description", "Commodity", "UOM", "Quantity", "Unit Price", "Total"})
+			lineItems = append(lineItems, []string{"No.", "Description", "Commodity", "UOM", "Quantity", "Unit Price", "Total"})
 		}
 		if len(po.PoLines) == 0 {
 			if showItemCode {
