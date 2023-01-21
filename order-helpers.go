@@ -121,7 +121,6 @@ func createLineItem(pdf *gopdf.Fpdf, rows [][]string, cols []float64, lineHeight
 
 		for i := 0; i < numRows; i++ { // start of the execution block
 			rowFill = append(rowFill, fill)
-
 		}
 		fill = !fill
 		newRows = append(newRows, multiRow...)
@@ -598,10 +597,20 @@ func CreatePurchaseOrderInvoice(pdf *gopdf.Fpdf, po PoHeader, invoice Invoice, i
 	lineItems := [][]string{}
 
 	if isInvoice {
-		lineItems = append(lineItems, []string{"No.", "Description", "UOM", "Quantity", "Unit Price", "Total"})
+		if showItemCode {
+			lineItems = append(lineItems, []string{"No.", "Code", "Description", "UOM", "Quantity", "Unit Price", "Total"})
+		} else {
+			lineItems = append(lineItems, []string{"No.", "Description", "UOM", "Quantity", "Unit Price", "Total"})
+		}
+
 		if len(invoice.InvoiceLines) == 0 {
-			strArr := []string{"", "", "", "", "", "-"}
-			lineItems = append(lineItems, strArr, strArr, strArr, strArr)
+			if showItemCode {
+				strArr := []string{"", "", "", "", "", "", "-"}
+				lineItems = append(lineItems, strArr, strArr, strArr, strArr, strArr)
+			} else {
+				strArr := []string{"", "", "", "", "", "-"}
+				lineItems = append(lineItems, strArr, strArr, strArr, strArr)
+			}
 		} else {
 			for _, v := range invoice.InvoiceLines {
 				quantity := ""
@@ -610,8 +619,15 @@ func CreatePurchaseOrderInvoice(pdf *gopdf.Fpdf, po PoHeader, invoice Invoice, i
 				} else {
 					quantity = strconv.FormatFloat(v.Quantity, 'f', 3, 64)
 				}
-				strArr := []string{strconv.Itoa(v.LineNumber), v.ItemDescription, v.UomCode, quantity, ac.FormatMoney(v.UnitPrice), ac.FormatMoney(v.LineAmount)}
-				lineItems = append(lineItems, strArr)
+
+				if showItemCode {
+					strArr := []string{strconv.Itoa(v.LineNumber), v.ItemCode, v.ItemDescription, v.UomCode, quantity, ac.FormatMoney(v.UnitPrice), ac.FormatMoney(v.LineAmount)}
+					lineItems = append(lineItems, strArr)
+				} else {
+					strArr := []string{strconv.Itoa(v.LineNumber), v.ItemDescription, v.UomCode, quantity, ac.FormatMoney(v.UnitPrice), ac.FormatMoney(v.LineAmount)}
+					lineItems = append(lineItems, strArr)
+				}
+
 			}
 		}
 	} else {
