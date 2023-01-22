@@ -11,19 +11,17 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 	yLocLeft := mtop
 
 	businessName := ""
-	if isInvoice {
-		businessName = invoice.Business.Name
+	if len(logob) > 0 {
+		createLogo(pdf, image, mleft, mtop, "logo_pg"+strconv.Itoa(pageNum)+".png")
+		yLocLeft += (lineHeight * 4)
+	} else {
+		if isInvoice {
+			businessName = invoice.Business.Name
+		} else {
+			businessName = po.Instance.Business.Name
+		}
 		createTextBox(pdf, mleft, mtop, pdf.GetStringWidth(businessName)+6, lineHeight*2, businessName, "L", false, 16, "Medium")
 		yLocLeft += (lineHeight * 3)
-	} else {
-		if len(logob) <= 0 {
-			businessName = po.Instance.Business.Name
-			createTextBox(pdf, mleft, mtop, pdf.GetStringWidth(businessName)+6, lineHeight*2, businessName, "L", false, 16, "Medium")
-			yLocLeft += (lineHeight * 3)
-		} else {
-			createLogo(pdf, image, mleft, mtop, "logo_pg"+strconv.Itoa(pageNum)+".png")
-			yLocLeft += (lineHeight * 4)
-		}
 	}
 
 	//move below business name
@@ -68,23 +66,24 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 	vendorItems := [][]string{}
 	billToItems := [][]string{}
 	if isInvoice {
-		vendorItems = [][]string{
-			{"Sold By"},
-			{"Name", invoice.Business.Name},
-			{"Address", invoice.Business.Address},
-			{"", invoice.Business.City + ", " + invoice.Business.StateProvince + " " + invoice.Business.PostalCode},
-			{"", invoice.Business.Country},
+		if invoice.BusinessID > 0 {
+			vendorItems = [][]string{
+				{"Sold By"},
+				{"Name", invoice.Business.Name},
+				{"Address", invoice.Business.Address},
+				{"", invoice.Business.City + ", " + invoice.Business.StateProvince + " " + invoice.Business.PostalCode},
+				{"", invoice.Business.Country},
+			}
+			yLocLeft += (lineHeight * 5)
+			if len(invoice.Business.Phone) > 0 {
+				vendorItems = append(vendorItems, []string{"Phone", invoice.Business.Phone})
+				yLocLeft += (lineHeight * 1)
+			}
+			if len(invoice.UserEmail) > 0 {
+				vendorItems = append(vendorItems, []string{"Email", invoice.UserEmail})
+				yLocLeft += (lineHeight * 1)
+			}
 		}
-		yLocLeft += (lineHeight * 5)
-		if len(invoice.Business.Phone) > 0 {
-			vendorItems = append(vendorItems, []string{"Phone", invoice.Business.Phone})
-			yLocLeft += (lineHeight * 1)
-		}
-		if len(invoice.UserEmail) > 0 {
-			vendorItems = append(vendorItems, []string{"Email", invoice.UserEmail})
-			yLocLeft += (lineHeight * 1)
-		}
-
 		billToItems = [][]string{
 			{"Bill To"},
 			{"Name", invoice.Instance.Business.Name},
