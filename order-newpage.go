@@ -24,7 +24,7 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 		yLocLeft += (lineHeight * 3)
 	}
 
-	//move below business name
+	// move below business name
 	pdf.SetXY(mleft, yLocLeft)
 
 	var firstColumnWidth float64 = sumWidth/2 - 3
@@ -124,7 +124,7 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 		createContacts(billToItems, contactColumnWidths, lineHeight, pdf, firstColumnWidth)
 	}
 
-	//ORDER HEADER TEXT
+	// ORDER HEADER TEXT
 	pdf.SetXY(secondColumnXLoc, mtop)
 	//"order" header empty box
 	headerFontSize := 16.
@@ -163,9 +163,9 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 	// orderRevCols := []float64{revWidth, revWidth, revWidth, revWidth}
 	// orderRevisionDetails := [][]string{}
 	if isInvoice {
-		//orderRevisionDetails = append(orderRevisionDetails, []string{"Order", invoice.InvoiceNumber, "", ""})
+		// orderRevisionDetails = append(orderRevisionDetails, []string{"Order", invoice.InvoiceNumber, "", ""})
 	} else {
-		//orderRevisionDetails = append(orderRevisionDetails, []string{"Order", po.PoNumber, "Revision", strconv.Itoa(po.Rev)})
+		// orderRevisionDetails = append(orderRevisionDetails, []string{"Order", po.PoNumber, "Revision", strconv.Itoa(po.Rev)})
 	}
 
 	pdf.SetXY(secondColumnXLoc, mtop+(lineHeight*2))
@@ -191,14 +191,14 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 
 	createPOHeaderItems(pdf, poHeaderItems, poCols, lineHeight, mleft, mtop, sumWidth, secondColumnXLoc)
 
-	if len(po.BusinessShipTo.Name) > 0 {
+	if len(po.ShipToBusinessAddress.Name) > 0 {
 		yLocRight := pdf.GetY()
 		shipToItems := [][]string{
 			{"Ship To"},
-			{po.BusinessShipTo.Name},
-			{po.BusinessShipTo.ShippingAddress},
-			{po.BusinessShipTo.ShippingCity + ", " + po.BusinessShipTo.ShippingStateProvince + " " + po.BusinessShipTo.ShippingPostalCode},
-			{po.BusinessShipTo.ShippingCountry},
+			{po.ShipToBusinessAddress.Name},
+			{po.ShipToBusinessAddress.Address},
+			{po.ShipToBusinessAddress.City + ", " + po.ShipToBusinessAddress.StateProvince + " " + po.ShipToBusinessAddress.PostalCode},
+			{po.ShipToBusinessAddress.Country},
 		}
 
 		pdf.SetXY(secondColumnXLoc, yLocRight)
@@ -290,7 +290,7 @@ func CreateNewOrderPage(pageNum int, image []byte, pdf *gopdf.Fpdf, logob []byte
 	}
 	pdf.SetX(mleft)
 
-	//FULLWIDTH SECTION
+	// FULLWIDTH SECTION
 	pageCount := pdf.PageCount()
 	notesYLoc := pdf.GetY()
 	if pageCount > 1 {

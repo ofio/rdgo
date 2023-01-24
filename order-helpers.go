@@ -244,14 +244,18 @@ func queryPurchaseOrder(poHeaderID int, token string, xHasuraAdminSecret string,
 				postal_code
 				country
 			}
-			businessShipTo {
-				name
-				shipping_address
-				shipping_city
-				shipping_state_province
-				shipping_postal_code
-				shipping_country
-			}
+			ship_to_business_address{
+        uuid
+        name
+        business_uuid
+        address
+        city
+        state_province
+        country
+        postal_code
+        attention
+        phone
+      }
 			businessSupplier {
 				name
 				address
