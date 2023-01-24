@@ -499,7 +499,6 @@ type PoHeader struct {
 	SupplierContact       User             `json:"supplier_contact"`
 	UpdatedAt             time.Time        `json:"updated_at"`
 	BusinessBillTo        BusinessBillTo   `json:"businessBillTo"`
-	BusinessShipTo        BusinessShipTo   `json:"businessShipTo"`
 	BusinessSupplier      BusinessSupplier `json:"businessSupplier"`
 	PoLines               []PoLines        `json:"po_lines"`
 	Contract              Contract         `json:"contract"`
@@ -512,6 +511,20 @@ type PoHeader struct {
 	InstanceID            int              `json:"instance_id"`
 	UUID                  string           `json:"uuid"`
 	Buyer                 User             `json:"buyer"`
+	ShipToBusinessAddress BusinessAddress  `json:"ship_to_business_address"`
+}
+
+type BusinessAddress struct {
+	UUID          string `json:"uuid"`
+	Name          string `json:"name"`
+	BusinessUUID  string `json:"business_uuid"`
+	Address       string `json:"address"`
+	City          string `json:"city"`
+	StateProvince string `json:"state_province"`
+	Country       string `json:country`
+	PostalCode    string `json:"postal_code"`
+	Attention     string `json:"attention"`
+	Phone         string `json:phone`
 }
 
 type BusinessBillTo struct {
